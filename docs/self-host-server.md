@@ -114,8 +114,9 @@ This creates the LitScout folder (`etc`, `state`, `logs`, `backups`,
 - `etc/server.json`: where the server listens (`127.0.0.1:8787`), its data
   folder and the Worker's variables, taken from your config;
 - `etc/secrets.env`: a new management token and consent secret (mode 600).
-  Add source keys here as `S2_API_KEY=…`, `OPENALEX_API_KEY=…` or
-  `CORE_API_KEY=…` lines if you have them;
+  Add the server's source keys here as `S2_API_KEY=…`, `OPENALEX_API_KEY=…`
+  or `CORE_API_KEY=…` lines if you have them; the daily run's keys go in
+  `etc/sources.env` ([Paper sources and their keys](sources.md#on-your-own-server));
 - `~/.config/litscout/state.json`: the management token and address for the
   CLI.
 
@@ -233,8 +234,9 @@ time zone name works too, for example `*-*-* 09:45:00 Europe/Berlin`. The
 weekly summary follows `instance.timezone` in your config. The fetch reads source keys from
 `etc/sources.env` (mode 600, owner `litscout`; `KEY=VALUE` lines for
 `OPENALEX_API_KEY`, `OPENREVIEW_USERNAME` and `OPENREVIEW_PASSWORD` or
-`OPENREVIEW_TOKEN`, `S2_API_KEY`), which `litscout-daily@.service` loads when
-it exists. Then:
+`OPENREVIEW_TOKEN`, `S2_API_KEY`, `UNPAYWALL_EMAIL` and any publisher keys;
+see [Paper sources and their keys](sources.md)), which
+`litscout-daily@.service` loads when it exists. Then:
 
 ```sh
 # In a root shell: other users cannot read the litscout home folder.

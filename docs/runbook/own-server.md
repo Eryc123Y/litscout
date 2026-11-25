@@ -137,7 +137,8 @@ apply here. The Worker knows it runs on the server because `apps/server` sets
 `litscout-daily@.service` and the three timers (01:45 UTC main, 06:30 and
 08:30 retries, 13:45 final; arXiv's listing has appeared around 05:40 UTC). The unit loads `etc/sources.env` (mode 600, owner `litscout`) when it
 exists: `OPENALEX_API_KEY`, `OPENREVIEW_USERNAME` and `OPENREVIEW_PASSWORD`
-(or `OPENREVIEW_TOKEN`) and `S2_API_KEY`. Without them OpenAlex conference
+(or `OPENREVIEW_TOKEN`), `S2_API_KEY` and the others listed in
+[Paper sources and their keys](../sources.md). Without them OpenAlex conference
 reads fail once the shared keyless budget runs out, and OpenReview venues are
 skipped; a retry only finishes what is missing. After the day's own work, every run
 catches up: days crawled but skipped while a later listing was read

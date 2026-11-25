@@ -865,7 +865,8 @@ this order: `jmlr`, `acl_anthology`, `pmlr`, `doi_prefix`, `container_title`,
 conference. An entry with none of them is skipped with a warning. Optional
 fields: `top: true` marks a venue for the reader's top-venue filter, and
 `sources` limits an entry to the named sources. OpenAlex lookups work better
-with `OPENALEX_API_KEY` set, and OpenReview needs a login or token.
+with `OPENALEX_API_KEY` set, and OpenReview needs a login or token:
+[Paper sources and their keys](sources.md) says where they go.
 
 ## Cloudflare Free plan
 

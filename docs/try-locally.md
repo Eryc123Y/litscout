@@ -203,6 +203,10 @@ Stop the server with Ctrl-C and start it again as in step 3. The next fetch
 uses the new categories, topics and venues. `--force` keeps the token and
 the data; it rewrites only the server's settings.
 
+A trial needs no keys. To add an OpenAlex or Semantic Scholar key, or an
+OpenReview login for venues such as ICLR, see
+[Paper sources and their keys](sources.md#in-a-trial-on-your-own-computer).
+
 ## How a trial stays private
 
 The server listens on `127.0.0.1`, which other machines cannot reach, and

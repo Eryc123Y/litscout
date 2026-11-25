@@ -164,8 +164,12 @@ daily use on several devices.
   servers with OAuth, such as Claude Code, claude.ai or Codex.
 - **For vault sync (optional):** an Obsidian vault on the machine that runs
   the sync.
-- **Source API keys (optional):** keys for Semantic Scholar, OpenAlex or CORE
-  can be added later. The feed works without them.
+- **Source keys (optional):** the arXiv feed, Hugging Face daily papers and
+  most journals and conferences need no key. An OpenAlex or Semantic Scholar
+  key makes lookups faster and more reliable, OpenReview venues such as ICLR
+  need an openreview.net login, and CORE and some publishers' abstracts need
+  their own keys. [Paper sources and their keys](docs/sources.md) lists each
+  source and where its key goes.
 
 ## First run
 
@@ -227,6 +231,7 @@ When the first day looks right, continue in your guide:
 | Add summaries and the brief             | [Edit the config](docs/self-host.md#7-edit-the-config-and-update-deployment) | [Agent clients](docs/self-host-server.md#11-agent-clients-optional)                      |
 | Connect Claude Code, claude.ai or Codex | [Pair an MCP client](docs/self-host.md#10-pair-an-mcp-client)                | [The same steps](docs/self-host.md#10-pair-an-mcp-client), with your server's address    |
 | Sync an Obsidian vault                  | [Obsidian vault sync](docs/self-host.md#obsidian-vault-sync)                 | [The same reference](docs/self-host.md#obsidian-vault-sync)                              |
+| Add source keys, such as OpenReview     | [On Cloudflare](docs/sources.md#on-cloudflare)                               | [On your own server](docs/sources.md#on-your-own-server)                                 |
 
 ## Documentation
 
@@ -235,6 +240,7 @@ When the first day looks right, continue in your guide:
 | [Try LitScout on your own computer](docs/try-locally.md)    | A trial on one computer, with no account, domain or server                           |
 | [Self-hosting LitScout](docs/self-host.md)                  | Setup on Cloudflare, MCP pairing and tools, vault sync, backups and Free plan limits |
 | [Self-hosting on your own server](docs/self-host-server.md) | Setup on a Linux server                                                              |
+| [Paper sources and their keys](docs/sources.md)             | Every paper source, which need a key, and where each key goes                        |
 | [Own-server runbook](docs/runbook/own-server.md)            | Server layout, updates, storage limits and moving from Cloudflare                    |
 | [Using LitScout](docs/guide/using-litscout.md)              | The pages, a reading day, Zotero import and asking an agent client for help          |
 | [Daily runbook](docs/runbook/daily.md)                      | The daily commands in order and what to do when a run fails                          |
