@@ -63,6 +63,12 @@ deployment are involved. The fixture day is 2026-11-17: open
 `/app/days/2026-11-17`. `pnpm test:e2e` starts and stops this server itself and
 checks desktop and phone viewports.
 
+`pnpm web:demo` is the same server with one more day, 2026-11-12, of invented
+papers that have summaries, a brief and code links
+(`apps/worker/test/helpers/web-demo.ts`). The README's pictures come from it:
+`tools/readme-images.sh` takes the screenshots and the triage GIF again and
+needs ffmpeg.
+
 Never set `LOCAL_DEV=true` in a deployment. Production relies on same-origin
 Cloudflare Access cookies.
 

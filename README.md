@@ -7,6 +7,14 @@ matches first. You read the feed in a web app and keep the papers you care
 about in a library. Agent clients such as Claude Code, claude.ai and Codex
 reach the same data through a remote MCP server.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/day-dark.png">
+  <img src="docs/images/day-light.png" alt="A day in the LitScout reader: the day's papers on the left with a triage card and topic tabs, and the morning brief on the right with a radar of papers close to the reader's projects.">
+</picture>
+
+A day in the reader: the day's papers on the left, the morning brief on the
+right. The papers in these pictures are invented.
+
 You run your own copy. There is no hosted service and no shared account.
 
 **This is a first public test version.** LitScout runs every day for its
@@ -15,42 +23,89 @@ machines, but few other people have set it up yet. If a step fails or
 something is unclear, please
 [open an issue](https://github.com/Eryc123Y/litscout/issues).
 
+## See it without setting anything up
+
+With Node 22.13 or later and pnpm, the reader runs on your computer with
+invented papers. It needs no account and no configuration, and it makes no
+network requests.
+
+```sh
+git clone https://github.com/Eryc123Y/litscout.git
+cd litscout
+pnpm install --frozen-lockfile
+pnpm web:demo
+```
+
+Open <http://127.0.0.1:4173/app/days/2026-11-12>. To run LitScout on your own
+topics, go to [Try it first](#try-it-first).
+
 ## What it does
 
-- **Daily feed.** LitScout reads the arXiv listing for the categories you
-  choose, Hugging Face daily papers, and a watchlist of journals and
-  conferences. A missed day is filled in on a later run.
-- **Topics and shortlist.** You name your topics and give each one keywords.
-  A keyword in a paper's title or abstract tags the paper with that topic and
-  puts it on the day's shortlist.
-- **Summaries and a morning brief (optional).** A model writes a short summary
-  of each paper and a daily brief, with picks per topic and a radar of papers
-  close to your projects. The model work runs through an agent CLI you are
-  already signed in to (Claude Code, Codex or Antigravity), or through your
-  own API key. Without either, LitScout runs in keyword-only mode and shows
-  abstracts.
-- **Library.** Save any paper by DOI, arXiv ID, URL or title, with or without
-  a PDF. LitScout keeps metadata, identifiers and links, not files. You can
-  rate, star and annotate papers, import a Zotero export and mirror an
-  alphaXiv library.
-- **Ideas and vault sync (optional).** If you keep research notes in Obsidian,
-  LitScout reads an index of your project, idea and draft notes and shows them
-  next to the papers. Ideas you capture and papers you link while reading wait
-  in a queue until the next sync writes them into the vault. The vault keeps
-  your notes; LitScout keeps the papers.
-- **MCP and CLI.** The `/mcp` endpoint lets agent clients read the feed and
-  library and save papers and notes. Clients connect with OAuth or a token.
-  The `litscout` command-line tool sets LitScout up, runs the daily jobs and
-  does maintenance.
+### A morning brief and a ranked day
 
-The web reader has pages for today's feed, past days, monthly trends, the
-library, ideas and working papers. A Health page shows whether each day's run
-finished on time. Everything is private by default: the browser signs in
-through Cloudflare Access, and the CLI and MCP clients use tokens or OAuth. A
-public, read-only feed is opt-in.
+LitScout reads the arXiv listing for the categories you choose, Hugging Face
+daily papers, and a watchlist of journals and conferences. You name your
+topics and give each one keywords; a keyword in a paper's title or abstract
+tags the paper and puts it on the day's shortlist. A missed day is filled in
+on a later run.
+
+With a model, each paper gets a short summary, and each day gets a brief: a
+radar of papers close to your projects, picks per topic, and idea
+suggestions. The model work runs through an agent CLI you are already signed
+in to (Claude Code, Codex or Antigravity), or through your own API key.
+Without either, LitScout runs in keyword-only mode and shows abstracts.
+
+### Triage on a busy day
+
+On a day with hundreds of papers, the triage queue holds the ones worth a
+decision: the brief's radar items and picks, then papers on your topics with
+public code. You decide one paper at a time, with one key each: skip it,
+mark it to read, or save it. Skipped papers leave the list, and the rest wait
+in the library.
+
+![A triage pass: the reader steps through the queue, marks papers To read, Skipped or Saved with single keys, undoes one decision and opens the library's To read list.](docs/images/triage.gif)
+
+### A paper beside the list
+
+Opening a paper keeps the list in view. The reader shows the summary, the
+abstract, identifiers and links, and the actions: save, mark to read, skip,
+star, rate, capture an idea, or link the paper to one. LitScout keeps
+metadata, identifiers and links, not PDF files.
+
+![A paper open beside the day's list, with its summary, links and reading actions.](docs/images/paper.png)
+
+### A library, trends and a phone layout
+
+Save any paper by DOI, arXiv ID, URL or title, import a Zotero export, or
+mirror an alphaXiv library. Trends show, for each topic and month, how many
+papers appeared, how many reached your radar, and which terms recur. The
+reader has a phone layout with the same pages.
+
+<table>
+  <tr>
+    <td width="68%"><img src="docs/images/trends.png" alt="The Trends page for one topic and month: paper counts, radar hits, digest picks and two bar charts over twelve months."></td>
+    <td width="32%"><img src="docs/images/phone.png" alt="The same day on a phone: the date, the triage card and the topic tabs, with a bottom bar for Today, Days, Library, Ideas and More."></td>
+  </tr>
+</table>
+
+### Ideas, vault sync and agent clients
+
+- **Ideas and vault sync (optional).** If you keep research notes in
+  Obsidian, LitScout reads an index of your project, idea and draft notes
+  and shows them next to the papers. Ideas you capture and papers you link
+  while reading wait in a queue until the next sync writes them into the
+  vault. The vault keeps your notes; LitScout keeps the papers.
+- **MCP and CLI.** The `/mcp` endpoint lets agent clients read the feed and
+  library, work through the triage queue, and save papers and notes. Clients
+  connect with OAuth or a token. The `litscout` command-line tool sets
+  LitScout up, runs the daily jobs and does maintenance.
+
+A Health page shows whether each day's run finished on time. Everything is
+private by default: the browser signs in through Cloudflare Access, and the
+CLI and MCP clients use tokens or OAuth. A public, read-only feed is opt-in.
 
 LitScout is not a chat app or a research agent. Discussion and writing happen
-in your agent client. It does not store PDFs.
+in your agent client.
 
 ## How it fits together
 

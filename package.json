@@ -20,6 +20,7 @@
     "test:worker": "pnpm build && node apps/cli/scripts/worker-smoke.mjs && node apps/cli/scripts/cli-smoke.mjs",
     "test:migrations": "vitest run packages/db/test/migrations.test.ts",
     "web:local": "tsx tools/local-web.ts",
+    "web:demo": "LITSCOUT_DEMO=1 tsx tools/local-web.ts",
     "test:e2e": "playwright test"
   },
   "dependencies": {

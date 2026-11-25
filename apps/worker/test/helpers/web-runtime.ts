@@ -11,6 +11,7 @@ import { shiftMonth } from "@litscout/pipeline/trends-contracts";
 import { seedResearch } from "./web-research";
 import { seedReview } from "./web-review";
 import { seedLongBrief } from "./web-long-brief";
+import { seedDemo } from "./web-demo";
 const recorded = z.array(
   z.object({
     id: z.string(),
@@ -171,6 +172,8 @@ type RuntimeOptions = {
   researchFixtures?: boolean;
   reviewFixtures?: boolean;
   longBriefFixture?: boolean;
+  /** One invented day with summaries, a brief and code links (web:demo). */
+  demoFixture?: boolean;
   /** One more 2026-11-17 paper that matches none of the reader's topics. */
   unmatchedFixture?: boolean;
   trendsFixtures?: boolean;
@@ -199,6 +202,7 @@ export async function webRuntime(options: RuntimeOptions = {}) {
         await seedResearch(db, papers, options.reviewFixtures);
       if (options.reviewFixtures) await seedReview(db);
       if (options.longBriefFixture) await seedLongBrief(db);
+      if (options.demoFixture) await seedDemo(db);
       if (options.unmatchedFixture) await seedUnmatched(db);
     }
     return mf;
