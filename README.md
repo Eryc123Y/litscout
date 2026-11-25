@@ -13,7 +13,7 @@ You run your own copy. There is no hosted service and no shared account.
 author, and the trial and own-server guides have been followed on clean
 machines, but few other people have set it up yet. If a step fails or
 something is unclear, please
-[open an issue](https://github.com/Eryc123Y/litscout-app/issues).
+[open an issue](https://github.com/Eryc123Y/litscout/issues).
 
 ## What it does
 

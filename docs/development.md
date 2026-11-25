@@ -21,7 +21,8 @@ The workspace layout is in the [README](../README.md#development). The
 
 ## The merge gate
 
-Every change passes `pnpm verify` locally before it merges.
+Every change passes `pnpm verify` locally before it merges. GitHub Actions
+runs the same command on every pull request and on pushes to `main`.
 
 ```sh
 nice -n 10 pnpm verify

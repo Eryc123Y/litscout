@@ -1,8 +1,15 @@
 name: CI
 # Checks run locally before merging: `nice -n 10 pnpm verify` (see docs/self-host.md).
-# This workflow only runs when started by hand, so it uses no Actions minutes otherwise.
+# This workflow runs the same command on every pull request and on pushes to main.
 on:
+  pull_request:
+  push:
+    branches: [main]
   workflow_dispatch:
+# A newer push to the same branch or pull request replaces the run before it.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:

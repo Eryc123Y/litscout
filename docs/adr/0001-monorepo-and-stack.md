@@ -3,7 +3,8 @@
 Status: accepted for M0, 2026-11-17.
 
 **2026-11-18 update.** The merge gate now runs locally with `pnpm verify`.
-The Actions workflow runs the same command on manual dispatch. The original
+The Actions workflow runs the same command; since the repository became
+public (2026-11-25) it does so on every pull request and push to `main`. The original
 M0 CI decision is recorded below. [Merge checks](../self-host.md#checks-before-merging)
 
 ## Decision

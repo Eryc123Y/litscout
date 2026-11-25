@@ -577,7 +577,7 @@ and the LitScout checkout for `REPO`. No actual sidecar is edited by these docs.
 
 ## References
 
-- For repository changes, the merge gate is local `pnpm verify`. The Actions workflow can run it by manual dispatch. [Merge checks](../self-host.md#checks-before-merging) · [Scripts](../../package.json) · [Workflow](../../.github/workflows/ci.yml)
+- For repository changes, the merge gate is local `pnpm verify`. The Actions workflow runs it on every pull request. [Merge checks](../self-host.md#checks-before-merging) · [Scripts](../../package.json) · [Workflow](../../.github/workflows/ci.yml)
 - [Cutover and rollback](cutover.md)
 - [CLI contracts](../../packages/pipeline/src/contracts/index.ts)
 

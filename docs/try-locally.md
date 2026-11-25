@@ -22,7 +22,7 @@ You need macOS or Linux, Git, Node 22.13 or later, and pnpm at the version in
 ## 1. Build
 
 ```sh
-git clone https://github.com/Eryc123Y/litscout-app.git litscout
+git clone https://github.com/Eryc123Y/litscout.git
 cd litscout
 pnpm install --frozen-lockfile
 pnpm build

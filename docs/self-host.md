@@ -486,7 +486,8 @@ nice -n 10 pnpm verify
 It runs the dependency audit, `pnpm check` (typecheck, lint, unit tests with
 coverage gates, build, Playwright, formatting and the repository audit), the
 Worker and CLI bundle smoke tests, and the offline rehearsal. The GitHub
-workflow runs the same command on manual dispatch from the Actions tab.
+workflow runs the same command on every pull request and on pushes to
+`main`.
 [Scripts](../package.json) · [Workflow](../.github/workflows/ci.yml)
 
 ## Access layout for browser, CLI and MCP
