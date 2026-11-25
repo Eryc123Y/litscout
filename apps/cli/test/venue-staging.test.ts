@@ -20,7 +20,10 @@ const real = readFileSync(
   .map((s) => JSON.parse(s))
   .find((p) => p.id === "doi:10.46298/lmcs-22(4:18)2026");
 const line = { ...real, abstract: null, arxiv_id: null, openreview_id: null };
-function replay(env: Record<string, string> = {}) {
+function replay(
+  env: Record<string, string> = {},
+  now = "2026-11-17T03:30:00Z",
+) {
   const config = defineConfig({
     sources: {
       arxiv: { categories: [] },
@@ -33,7 +36,7 @@ function replay(env: Record<string, string> = {}) {
     dir: "/unused-test-state",
     env,
     fetch: vi.fn() as typeof fetch,
-    now: () => new Date("2026-11-17T03:30:00Z"),
+    now: () => new Date(now),
     sleep: async () => {},
     warn: () => {},
   });
@@ -75,4 +78,25 @@ it("T2 records the actual failure class/message and a redacted stack instead of 
     }),
   );
   expect(JSON.stringify(result)).not.toContain("synthetic-private-key");
+});
+it("looks back four days from the last completed venue read, so deferred papers stay in the window", async () => {
+  // 11-25: OpenAlex listed 1,376 ICML papers with a created date of 11-23.
+  // While some are deferred the cursor stays at 11-25; on 11-28 a window
+  // starting four days before the run day (11-24) would drop the rest.
+  const since = async (day: string, cursor: string) => {
+    watch.mockReset();
+    watch.mockResolvedValueOnce([]);
+    await replay({}, `${day}T03:30:00Z`)(
+      day,
+      [],
+      JSON.stringify({ since: cursor }),
+      [],
+    );
+    const args = watch.mock.calls[0]![0] as string[];
+    return args[args.indexOf("--since") + 1];
+  };
+  expect(await since("2026-11-28", "2026-11-25")).toBe("2026-11-21");
+  // A read every day keeps the usual four-day look-back.
+  expect(await since("2026-11-26", "2026-11-26")).toBe("2026-11-22");
+  expect(await since("2026-11-26", "2026-11-25")).toBe("2026-11-21");
 });

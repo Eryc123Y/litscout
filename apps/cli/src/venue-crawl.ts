@@ -48,10 +48,20 @@ export async function venuePapers(
   const file = path.resolve(deps.cwd, config.sources.venues.watchlist);
   const venues = await readVenues(file);
   if (!venues.length) return [];
-  const stored = cursor
-    ? z.object({ since: z.iso.date() }).parse(JSON.parse(cursor)).since
+  // The cursor is the day of the last venue read whose papers were all
+  // uploaded; it stays put while papers are deferred. Sources date some works
+  // days before they appear (OpenAlex listed 11-25's ICML batch as created
+  // 11-23), so the window looks back four days from the earlier of the cursor
+  // and the run day: deferred papers stay in it until they are uploaded.
+  const since = cursor
+    ? [
+        shiftDay(
+          z.object({ since: z.iso.date() }).parse(JSON.parse(cursor)).since,
+          -4,
+        ),
+        shiftDay(day, -4),
+      ].sort()[0]!
     : shiftDay(day, -7);
-  const since = [stored, shiftDay(day, -4)].sort()[0]!;
   const lines = await watchVenues(
     [
       "--venues",
