@@ -1,0 +1,27 @@
+{
+  "referenceCommit": "4db2f7ada17a774ab8a69fd2c2044d6b45b4439a",
+  "files": [
+    {
+      "file": "data/2026-11-10.jsonl",
+      "rows": 1124,
+      "originalSha256": "88980182d38b5d5266dbf508692ad63992371e34bdba88c33081670673e99a2d",
+      "recordedSha256": "88980182d38b5d5266dbf508692ad63992371e34bdba88c33081670673e99a2d",
+      "redactedPublicContacts": 0
+    },
+    {
+      "file": "data/2026-11-11.jsonl",
+      "rows": 838,
+      "originalSha256": "a249114545b415a35abebd3719889c8c12cba7893ae62150a5a1c63305f7d2ed",
+      "recordedSha256": "a249114545b415a35abebd3719889c8c12cba7893ae62150a5a1c63305f7d2ed",
+      "redactedPublicContacts": 0
+    },
+    {
+      "file": "data/2026-11-12.jsonl",
+      "rows": 418,
+      "originalSha256": "89beb9f1daa34df4cec0f5515836a9ddad8ef7060e8aa26ee9b2cf02ad1cc7e7",
+      "recordedSha256": "89beb9f1daa34df4cec0f5515836a9ddad8ef7060e8aa26ee9b2cf02ad1cc7e7",
+      "redactedPublicContacts": 0
+    }
+  ],
+  "note": "Complete raw data-branch files; copied with git show, no checkout or fetch."
+}

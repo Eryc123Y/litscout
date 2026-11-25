@@ -1,0 +1,54 @@
+{
+ "meta": {
+  "count": 3
+ },
+ "results": [
+  {
+   "doi": "https://doi.org/10.1007/978-3-032-37086-0_9",
+   "abstract_inverted_index": null,
+   "open_access": {
+    "oa_url": "https://arxiv.org/pdf/2512.14442"
+   },
+   "locations": [
+    {
+     "landing_page_url": "https://doi.org/10.1007/978-3-032-37086-0_9",
+     "pdf_url": null
+    },
+    {
+     "landing_page_url": "http://arxiv.org/abs/2512.14442",
+     "pdf_url": "https://arxiv.org/pdf/2512.14442"
+    }
+   ]
+  },
+  {
+   "doi": "https://doi.org/10.1007/978-3-032-37086-0_36",
+   "abstract_inverted_index": null,
+   "open_access": {
+    "oa_url": "https://arxiv.org/pdf/2604.11122"
+   },
+   "locations": [
+    {
+     "landing_page_url": "https://doi.org/10.1007/978-3-032-37086-0_36",
+     "pdf_url": null
+    },
+    {
+     "landing_page_url": "https://arxiv.org/abs/2604.11122",
+     "pdf_url": "https://arxiv.org/pdf/2604.11122"
+    }
+   ]
+  },
+  {
+   "doi": "https://doi.org/10.1007/978-3-032-37086-0_4",
+   "abstract_inverted_index": null,
+   "open_access": {
+    "oa_url": null
+   },
+   "locations": [
+    {
+     "landing_page_url": "https://doi.org/10.1007/978-3-032-37086-0_4",
+     "pdf_url": null
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,23 @@
+{
+  "builtin": "cron",
+  "restart_policy": "on-failure",
+  "display_name": "LitScout daily",
+  "description": "Run LitScout from a fixed checkout using the daily runbook.",
+  "args": [
+    "CRON_TZ=UTC 30 13 * * 1-5",
+    "agentapi",
+    "new-conversation",
+    "--model=YOUR_SCHEDULER_MODEL",
+    "--",
+    "Run LitScout by following `/ABSOLUTE/REPO/docs/runbook/daily.md` in self-host mode and pass `--config /ABSOLUTE/CONFIG/litscout.config.ts` to every LitScout command. Use pnpm to run the CLI. Use summaries run and digest run so the CLI applies its tool-less settings to the writing agents. End with the report as the final message."
+  ],
+  "agent_permissions": {
+    "workspace_uris": ["file:///ABSOLUTE/REPO"],
+    "access_grants": [
+      "read_file(/ABSOLUTE/REPO)",
+      "command(pnpm)",
+      "read_file(/ABSOLUTE/HOME/.cache/litscout/run)",
+      "write_file(/ABSOLUTE/HOME/.cache/litscout/run)"
+    ]
+  }
+}

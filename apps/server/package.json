@@ -1,0 +1,20 @@
+{
+  "name": "@litscout/server",
+  "version": "0.0.0",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "miniflare": "5.20261012.0-beta",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@litscout/db": "workspace:*"
+  }
+}

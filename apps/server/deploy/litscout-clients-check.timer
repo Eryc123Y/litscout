@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily login check of LitScout's agent CLIs (before the 21:45 run)
+
+[Timer]
+OnCalendar=*-*-* 20:30:00 Asia/Shanghai
+Persistent=true
+Unit=litscout-clients@check.service
+
+[Install]
+WantedBy=timers.target

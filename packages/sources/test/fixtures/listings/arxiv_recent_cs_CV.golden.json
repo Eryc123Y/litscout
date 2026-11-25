@@ -1,0 +1,50 @@
+[
+  {
+    "id": "2611.00001",
+    "categories": [
+      "cs.CV"
+    ],
+    "pdf": "https://arxiv.org/pdf/2611.00001",
+    "abs": "https://arxiv.org/abs/2611.00001",
+    "authors": [
+      "Ada Lovelace",
+      "Alan Turing"
+    ],
+    "title": "A Vision Paper",
+    "comment": null,
+    "summary": "",
+    "announced": "2026-11-09"
+  },
+  {
+    "id": "2611.00002",
+    "categories": [
+      "cs.LG",
+      "cs.CV"
+    ],
+    "pdf": "https://arxiv.org/pdf/2611.00002",
+    "abs": "https://arxiv.org/abs/2611.00002",
+    "authors": [
+      "Grace Hopper"
+    ],
+    "title": "A Learning Paper Cross-Listed Here",
+    "comment": null,
+    "summary": "",
+    "announced": "2026-11-09"
+  },
+  {
+    "id": "2611.00004",
+    "categories": [
+      "cs.CV"
+    ],
+    "pdf": "https://arxiv.org/pdf/2611.00004",
+    "abs": "https://arxiv.org/abs/2611.00004",
+    "authors": [
+      "Edsger Dijkstra"
+    ],
+    "title": "A Friday Paper",
+    "comment": "Code: this https URL",
+    "summary": "",
+    "code_url": "https://github.com/ed/friday",
+    "announced": "2026-11-06"
+  }
+]

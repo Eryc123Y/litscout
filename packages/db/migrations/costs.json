@@ -1,0 +1,263 @@
+{
+  "0001_schema.sql": {
+    "fixed": 128
+  },
+  "0002_fts.sql": {
+    "fixed": 24
+  },
+  "0003_radar_actions.sql": {
+    "fixed": 4
+  },
+  "0004_write_budget.sql": {
+    "fixed": 18
+  },
+  "0005_write_leases.sql": {
+    "fixed": 4
+  },
+  "0006_feed_read_counts.sql": {
+    "fixed": 18,
+    "counts": [
+      {
+        "table": "feed_items",
+        "writes": 1
+      },
+      {
+        "table": "paper_ids",
+        "writes": 1
+      },
+      {
+        "table": "feed_items",
+        "count": "coalesce(sum(6 + json_array_length(topics)),0)",
+        "writes": 1
+      }
+    ]
+  },
+  "0007_library.sql": {
+    "fixed": 8,
+    "counts": [
+      {
+        "table": "library_items",
+        "where": "deleted_at IS NULL",
+        "writes": 1
+      },
+      {
+        "table": "paper_links",
+        "writes": 1
+      }
+    ]
+  },
+  "0008_paper_verification.sql": {
+    "fixed": 3,
+    "counts": [
+      {
+        "table": "papers",
+        "where": "source='publisher'",
+        "writes": 3
+      }
+    ]
+  },
+  "0009_alphaxiv_mirror.sql": {
+    "fixed": 120,
+    "rebuild": true,
+    "counts": [
+      {
+        "table": "alphaxiv_items",
+        "writes": 5
+      }
+    ]
+  },
+  "0010_vault_sync.sql": {
+    "fixed": 40,
+    "counts": [
+      {
+        "table": "projects",
+        "writes": 1
+      }
+    ]
+  },
+  "0011_ingest_write_cost.sql": {
+    "fixed": 3
+  },
+  "0012_research_requests.sql": {
+    "fixed": 8,
+    "counts": [
+      {
+        "table": "suggestions",
+        "where": "deleted_at IS NULL",
+        "writes": 1
+      },
+      {
+        "table": "vault_requests",
+        "writes": 2
+      }
+    ]
+  },
+  "0013_keyword_read_order.sql": {
+    "fixed": 3,
+    "counts": [
+      {
+        "table": "feed_items",
+        "writes": 1
+      }
+    ]
+  },
+  "0014_vault_title_matches.sql": {
+    "fixed": 20,
+    "counts": [
+      {
+        "table": "papers",
+        "writes": 1
+      },
+      {
+        "table": "paper_index",
+        "writes": 2
+      },
+      {
+        "table": "vault_notes",
+        "writes": 1
+      }
+    ]
+  },
+  "0015_daily_runs.sql": {
+    "fixed": 6
+  },
+  "0016_backup_export.sql": {
+    "fixed": 2,
+    "counts": [
+      {
+        "table": "paper_ids",
+        "writes": 1
+      }
+    ]
+  },
+  "0017_write_cost.sql": {
+    "fixed": 256,
+    "rebuild": true,
+    "counts": [
+      {
+        "table": "paper_ids",
+        "writes": 2
+      },
+      {
+        "table": "paper_links",
+        "writes": 3
+      }
+    ]
+  },
+  "0018_budget_accuracy.sql": {
+    "fixed": 12
+  },
+  "0019_lease_expiry_day.sql": {
+    "fixed": 12
+  },
+  "0020_vault_token_scope.sql": {
+    "fixed": 12,
+    "counts": [
+      {
+        "table": "api_tokens",
+        "writes": 1
+      }
+    ]
+  },
+  "0021_monthly_trends.sql": {
+    "fixed": 6
+  },
+  "0022_derived_arxiv_links.sql": {
+    "fixed": 4
+  },
+  "0023_retention.sql": {
+    "fixed": 160,
+    "rebuild": true,
+    "counts": [
+      {
+        "table": "feed_items",
+        "writes": 5
+      },
+      {
+        "table": "papers",
+        "where": "deleted_at IS NULL",
+        "writes": 1
+      },
+      {
+        "table": "notes",
+        "where": "target_type='paper'",
+        "writes": 1
+      },
+      {
+        "table": "vault_notes",
+        "where": "kind='paper_note' AND deleted_at IS NULL",
+        "writes": 5
+      },
+      {
+        "table": "captures",
+        "writes": 1
+      },
+      {
+        "table": "vault_requests",
+        "writes": 1
+      },
+      {
+        "table": "digests",
+        "count": "coalesce(sum(json_array_length(picks)+json_array_length(radar)),0)",
+        "writes": 2
+      },
+      {
+        "table": "suggestions",
+        "count": "coalesce(sum(json_array_length(paper_ids)),0)",
+        "writes": 2
+      },
+      {
+        "table": "idea_index",
+        "count": "coalesce(sum(json_array_length(paper_ids)),0)",
+        "writes": 2
+      },
+      {
+        "table": "working_paper_index",
+        "count": "coalesce(sum(json_array_length(paper_ids)),0)",
+        "writes": 2
+      },
+      {
+        "table": "paper_index",
+        "where": "has_canonical=0",
+        "writes": 8
+      }
+    ]
+  },
+  "0024_scale_reads.sql": {
+    "fixed": 64,
+    "counts": [
+      {
+        "table": "events",
+        "where": "kind IN ('rate_up','rate_down','rate_clear')",
+        "writes": 1
+      },
+      {
+        "table": "alphaxiv_items",
+        "where": "removed_at IS NULL AND deleted_at IS NULL",
+        "writes": 1
+      },
+      {
+        "table": "alphaxiv_items",
+        "where": "paper_type='public' AND removed_at IS NULL AND deleted_at IS NULL",
+        "count": "coalesce(sum(json_array_length(folders)),0)",
+        "writes": 1
+      }
+    ]
+  },
+  "0025_note_bodies.sql": {
+    "fixed": 4
+  },
+  "0026_compact_expiry.sql": {
+    "fixed": 4,
+    "counts": [
+      {
+        "table": "paper_index",
+        "where": "has_canonical=0",
+        "writes": 1
+      }
+    ]
+  },
+  "0027_skipped_papers.sql": {
+    "fixed": 2
+  }
+}

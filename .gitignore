@@ -1,0 +1,13 @@
+node_modules/
+dist/
+coverage/
+.wrangler/
+.dev.vars
+.env*
+credentials.json
+.artifacts/
+
+# Playwright output when run from a package folder
+test-results/
+# Claude Code session worktrees (Prettier reads this file, not .git/info/exclude)
+.claude/worktrees/

@@ -1,0 +1,32 @@
+{
+  "source": "apps/cli/test/fixtures/round3/arxiv-recent.html",
+  "sourceSha256": "fdcc61e7ef9518e252cec3962af91ebab9dcf3a554bf9901887dc5220153a6d6",
+  "recordedAt": "2026-11-17T03:29:59.993Z",
+  "url": "https://arxiv.org/list/cs.CV/recent?show=2000",
+  "method": "DOM excerpts; announcement labels, IDs and paper records unchanged. Historical /new timing and the merged-day response sequence are simulated.",
+  "files": [
+    {
+      "file": "arxiv-2026-11-09-excerpt.html",
+      "date": "2026-11-09",
+      "entries": 117,
+      "sha256": "baa87d4b54120c01c0e08afd1764f49c332710ab1ffe7f87857581b79c59e5a1"
+    },
+    {
+      "file": "arxiv-2026-11-10-excerpt.html",
+      "date": "2026-11-10",
+      "entries": 317,
+      "sha256": "d5e2a74964181025a747b508338cb401cf226b38ce2ba32307de050a9092eb42"
+    },
+    {
+      "file": "arxiv-2026-11-11-excerpt.html",
+      "date": "2026-11-11",
+      "entries": 149,
+      "sha256": "801bb5f51cc4b18e410fd6210375be5f2ca56012437fe08c5ee92ef659479af5"
+    },
+    {
+      "file": "arxiv-merged-recent.html",
+      "sha256": "bc5905dc113a54ff026e25b48adc5dcd8014e46e7ccc3d3fe2bf1ae31b55d3ce",
+      "selection": "Wednesday and Monday recorded blocks only. Controlled replay of a missing Tuesday, not evidence that November 10 had no announcement."
+    }
+  ]
+}

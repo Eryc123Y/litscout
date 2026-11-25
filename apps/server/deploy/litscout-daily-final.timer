@@ -1,0 +1,10 @@
+[Unit]
+Description=LitScout final run at 21:45 (Asia/Shanghai)
+
+[Timer]
+OnCalendar=*-*-* 21:45:00 Asia/Shanghai
+Persistent=true
+Unit=litscout-daily@final.service
+
+[Install]
+WantedBy=timers.target

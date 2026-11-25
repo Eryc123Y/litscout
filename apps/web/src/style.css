@@ -1,0 +1,1050 @@
+@import "tailwindcss";
+@source "./**/*.{ts,tsx}";
+
+@theme inline {
+  --breakpoint-lg: 64.0625rem;
+  --font-sans: "Inter Variable", Inter, system-ui, sans-serif;
+  --font-serif: "Source Serif 4 Variable", "Source Serif 4", Georgia, serif;
+  --color-background: var(--ground);
+  --color-foreground: var(--ink);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--ink);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-ink);
+  --color-secondary: var(--soft);
+  --color-secondary-foreground: var(--ink);
+  --color-muted: var(--ground);
+  --color-muted-foreground: var(--muted);
+  --color-accent: var(--soft);
+  --color-accent-foreground: var(--accent);
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: var(--accent);
+  --color-destructive: var(--error);
+  --color-destructive-foreground: var(--error-ink);
+  --color-subtle: var(--subtle);
+  --color-radar: var(--radar);
+  --color-radar-soft: var(--radar-soft);
+  --color-radar-border: var(--radar-border);
+  --color-topic: var(--topic-colour);
+  --color-control: var(--control);
+  --color-control-hover: var(--control-hover);
+  --color-pressed: var(--pressed);
+  --color-row-on: var(--row-on);
+  --color-line-strong: var(--line-strong);
+  --color-good: var(--good);
+  --color-on-good: var(--on-good);
+  --color-good-soft: var(--good-soft);
+  --color-good-text: var(--good-text);
+  --color-late: var(--late);
+  --color-on-late: var(--on-late);
+  --color-late-soft: var(--late-soft);
+  --color-late-text: var(--late-text);
+  --color-missed: var(--missed);
+  --color-on-missed: var(--on-missed);
+  --color-missed-soft: var(--missed-soft);
+  --color-missed-text: var(--missed-text);
+  --color-brand-alphaxiv: var(--brand-alphaxiv);
+  --color-radar-mid: var(--radar-mid);
+  --color-radar-low: var(--radar-low);
+  --color-on-radar: var(--on-radar);
+  --color-on-radar-mid: var(--on-radar-mid);
+  --color-on-radar-low: var(--on-radar-low);
+  /* Radius by role: badges 6, rows and controls 8, nested blocks 10, containers 12. */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 12px;
+  --text-caption: 11px;
+  --text-body: 14px;
+  --text-reading: 17px;
+  --text-pane: 23px;
+  --text-title: 34px;
+}
+
+:root {
+  color-scheme: light;
+  --ground: #f6f7f9;
+  --surface: #fff;
+  --line: #e3e6eb;
+  --ink: #16181d;
+  --subtle: #4a505c;
+  --muted: #616a79;
+  --accent: #2846c7;
+  --accent-ink: #fff;
+  --soft: #eef1fc;
+  --radar: #8a5300;
+  --radar-soft: #fff6e5;
+  --radar-border: #f3ddb3;
+  --error: #b42336;
+  --error-ink: #fff;
+  --topic-l-a: 0.46;
+  --topic-l-b: 0.515;
+  --control: #eef0f3;
+  --control-hover: #e8ebef;
+  --pressed: #e3e6eb;
+  --row-on: #eceef2;
+  /* How far a read paper's row fades in a list. */
+  --read-fade: 0.45;
+  --line-strong: #858e9e;
+  --good: #1a7f4b;
+  --on-good: #fff;
+  --good-soft: #e8f5ee;
+  --good-text: #14603a;
+  --late: #e0a100;
+  --on-late: #16181d;
+  --late-soft: #fff4d6;
+  --late-text: #6b4a00;
+  --missed: #c22d3a;
+  --on-missed: #fff;
+  --missed-soft: #fbe9ea;
+  --missed-text: #8f1f29;
+  --brand-alphaxiv: #b8312f;
+  /* Radar levels, one amber hue: high (radar), medium, borrow. */
+  --radar-mid: #c4831f;
+  --radar-low: #ecc77e;
+  --on-radar: #fff;
+  --on-radar-mid: #16181d;
+  --on-radar-low: #16181d;
+}
+
+/* Dark is Graphite: neutral greys, a blue accent. The system fallback
+   covers the first paint before the theme script runs. */
+:root[data-theme="graphite"] {
+  --brand-alphaxiv: #f0a49a;
+  --radar-mid: #ad792c;
+  --radar-low: #6e4e20;
+  --on-radar: #121213;
+  --on-radar-mid: #121213;
+  --on-radar-low: #ececee;
+  color-scheme: dark;
+  --ground: #121213;
+  --surface: #1b1b1d;
+  --line: #2f2f33;
+  --ink: #ececee;
+  --subtle: #b8b8bc;
+  --muted: #9c9ca2;
+  --accent: #8ab4f8;
+  --accent-ink: #121213;
+  --soft: #1e2838;
+  --radar: #e9b44c;
+  --radar-soft: #211c12;
+  --radar-border: #463a1f;
+  --error: #ff939e;
+  --error-ink: #121213;
+  --topic-l-a: 0.76;
+  --topic-l-b: 0.85;
+  --control: #232326;
+  --control-hover: #2a2a2e;
+  --pressed: #2c2c31;
+  --row-on: #2c2c31;
+  --line-strong: #6c6c72;
+  --good: #81c995;
+  --on-good: #121213;
+  --good-soft: #1d2a20;
+  --good-text: #b6e3c4;
+  --late: #f29e4c;
+  --on-late: #121213;
+  --late-soft: #2e2114;
+  --late-text: #f7c99a;
+  --missed: #ec6f75;
+  --on-missed: #121213;
+  --missed-soft: #2e1a1b;
+  --missed-text: #f4b1b4;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --ground: #121213;
+    --surface: #1b1b1d;
+    --line: #2f2f33;
+    --ink: #ececee;
+    --subtle: #b8b8bc;
+    --muted: #9c9ca2;
+    --accent: #8ab4f8;
+    --accent-ink: #121213;
+    --soft: #1e2838;
+    --radar: #e9b44c;
+    --radar-soft: #211c12;
+    --radar-border: #463a1f;
+    --error: #ff939e;
+    --error-ink: #121213;
+    --topic-l-a: 0.76;
+    --topic-l-b: 0.85;
+    --control: #232326;
+    --control-hover: #2a2a2e;
+    --pressed: #2c2c31;
+    --row-on: #2c2c31;
+    --line-strong: #6c6c72;
+    --good: #81c995;
+    --on-good: #121213;
+    --good-soft: #1d2a20;
+    --good-text: #b6e3c4;
+    --late: #f29e4c;
+    --on-late: #121213;
+    --late-soft: #2e2114;
+    --late-text: #f7c99a;
+    --missed: #ec6f75;
+    --on-missed: #121213;
+    --missed-soft: #2e1a1b;
+    --missed-text: #f4b1b4;
+    --brand-alphaxiv: #f0a49a;
+    --radar-mid: #ad792c;
+    --radar-low: #6e4e20;
+    --on-radar: #121213;
+    --on-radar-mid: #121213;
+    --on-radar-low: #ececee;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body:has([data-slot="dialog-content"]) {
+    overflow: hidden;
+  }
+  body {
+    @apply m-0 bg-background font-sans text-body leading-normal text-foreground antialiased;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  [tabindex] {
+    @apply outline-ring;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-3;
+  }
+  button:not(:disabled),
+  select {
+    cursor: pointer;
+  }
+  a {
+    @apply text-primary;
+  }
+  h1,
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+}
+
+/* Untrusted Markdown has one shared typography treatment, within Tailwind. */
+@layer components {
+  .markdown {
+    @apply break-words leading-relaxed;
+  }
+  .markdown > * + * {
+    @apply mt-3;
+  }
+  .markdown h1 {
+    @apply font-sans text-xl font-semibold;
+  }
+  .markdown h2 {
+    @apply font-sans text-lg font-semibold;
+  }
+  .markdown :is(h4, h5, h6) {
+    @apply font-sans text-sm font-semibold;
+  }
+  .markdown :not(pre) > code {
+    @apply rounded-sm bg-muted px-1 font-mono text-[0.9em];
+  }
+  .markdown hr {
+    @apply border-border;
+  }
+  /* Wide tables scroll inside the note instead of widening the page. */
+  .markdown table {
+    @apply block max-w-full overflow-x-auto border-collapse text-sm;
+  }
+  .markdown :is(th, td) {
+    @apply border border-border px-2 py-1 text-left align-top;
+  }
+  .markdown .contains-task-list {
+    @apply list-none pl-1;
+  }
+  .markdown .task-list-item input {
+    @apply mr-2 align-middle;
+  }
+  .markdown h3 {
+    @apply font-sans text-base font-semibold;
+  }
+  .markdown ul {
+    @apply list-disc pl-5;
+  }
+  .markdown ol {
+    @apply list-decimal pl-5;
+  }
+  .markdown a {
+    @apply underline underline-offset-4;
+  }
+  .markdown blockquote {
+    @apply border-l-2 pl-4 text-subtle;
+  }
+  .markdown pre {
+    @apply overflow-x-auto rounded-sm bg-muted p-3 text-xs;
+  }
+  /* MathML from Temml: system math fonts, wide display math scrolls. The
+   * tml-* classes stand in for Temml's style attributes, which CSP drops. */
+  .markdown math {
+    font-family: "STIX Two Math", "Cambria Math", "Latin Modern Math", math;
+  }
+  .markdown .math-display {
+    @apply block max-w-full overflow-x-auto overflow-y-hidden py-1;
+  }
+  .markdown .tml-left {
+    text-align: left;
+  }
+  .markdown .tml-right {
+    text-align: right;
+  }
+}
+
+@layer components {
+  .reader-page {
+    @apply flex min-w-0 flex-col gap-5;
+  }
+  /* One header for every page: the title on the page background, its
+     actions on the title's own line. */
+  .reader-header {
+    @apply flex min-w-0 flex-wrap items-start gap-x-6 gap-y-3;
+  }
+  /* Two widths. Tables, boards and dashboards use the whole page frame;
+     a page of settings or a form keeps to one readable column at the left. */
+  .page-column {
+    @apply w-full max-w-3xl;
+  }
+  .reader-header-copy {
+    @apply flex min-w-0 flex-[1_1_22rem] flex-col gap-1.5 wrap-anywhere;
+  }
+  .reader-header-context {
+    @apply text-xs leading-normal text-muted-foreground;
+  }
+  .reader-title {
+    @apply font-serif text-[32px] leading-[1.15] font-semibold tracking-[-0.01em];
+  }
+  .reader-header-actions {
+    @apply ml-auto flex max-w-full flex-wrap items-center justify-end gap-2;
+  }
+  .reader-header-actions [data-slot="button"] {
+    @apply min-h-10;
+  }
+  .reader-panel {
+    @apply min-w-0 rounded-lg border bg-card p-4;
+  }
+  .reader-section-title {
+    @apply text-[15px] leading-snug font-semibold;
+  }
+  .reader-row {
+    @apply min-w-0 py-3;
+  }
+  /* A read paper's row fades as a whole: no dot and no check. The open row,
+     and the one under the pointer or keyboard focus, stay at full ink. The
+     children fade, not the row, so its highlight keeps its strength. */
+  .reader-row[data-read]:not([aria-current="true"], :hover, :focus-visible)
+    > * {
+    opacity: var(--read-fade);
+  }
+  .reader-list > .reader-row:first-child {
+    @apply pt-0;
+  }
+  .reader-list > .reader-row:last-child {
+    @apply pb-0;
+  }
+  /* The queue's progress, drawn in the app's own colours. A custom bar
+     needs appearance: none, and one rule per engine's fill. */
+  .triage-progress {
+    @apply block h-1.5 w-full;
+    appearance: none;
+    border: 0 solid;
+    overflow: clip;
+    border-radius: 999px;
+    background: var(--color-control-hover);
+  }
+  .triage-progress::-webkit-progress-bar {
+    background: transparent;
+  }
+  .triage-progress::-webkit-progress-value {
+    background: var(--color-primary);
+    border-radius: 999px;
+    transition: inline-size 0.3s;
+  }
+  .triage-progress::-moz-progress-bar {
+    background: var(--color-primary);
+    border-radius: 999px;
+  }
+  .triage-key {
+    @apply rounded-xs border px-1 font-sans text-[10px] leading-4 opacity-70;
+  }
+  .reader-row[data-density="compact"] {
+    @apply py-2;
+  }
+  .reader-record-link {
+    @apply font-serif text-base leading-snug font-semibold text-foreground underline-offset-4 hover:text-primary hover:underline;
+  }
+}
+
+@media (min-width: 64.0625rem) {
+  .listing-header .reader-title {
+    font-size: var(--text-title);
+  }
+}
+
+@layer components {
+  .paper-header .reader-header-copy {
+    @apply max-w-[920px] basis-full;
+  }
+  .paper-header .reader-header-actions {
+    @apply w-full;
+  }
+  /* The Filters popover opens under its button (anchor positioning), and as a
+     bottom sheet on phones. Older browsers get a script fallback. */
+  .filters-popover {
+    inset: auto;
+    position-area: block-end span-inline-start;
+    position-try-fallbacks: flip-block;
+    margin-block-start: 6px;
+  }
+  /* Row and card menus open under their ⋮ button, flipping up near the
+     bottom of the screen. Without anchor positioning they open centred. */
+  .row-menu {
+    inset: auto;
+    position-area: block-end span-inline-start;
+    position-try-fallbacks: flip-block;
+    margin-block-start: 4px;
+  }
+  .topic-row {
+    scrollbar-width: none;
+  }
+  /* The side with more topics to scroll fades out (set by a scroll
+     listener), so a chip cut off at the edge reads as scrollable. */
+  .topic-row[data-fade-end] {
+    mask-image: linear-gradient(
+      to right,
+      #000 calc(100% - 2.5rem),
+      transparent
+    );
+  }
+  .topic-row[data-fade-start] {
+    mask-image: linear-gradient(to left, #000 calc(100% - 2.5rem), transparent);
+  }
+  .topic-row[data-fade-start][data-fade-end] {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 2.5rem,
+      #000 calc(100% - 2.5rem),
+      transparent
+    );
+  }
+}
+
+/* Keyboard hints mean nothing on a touch screen. */
+@media (pointer: coarse) {
+  .shortcut-hint {
+    display: none;
+  }
+}
+
+/* The side panel: a paper or a note beside the page it was opened from.
+   The page keeps its own scroll and gives up the panel's width. */
+.side-panel {
+  position: fixed;
+  z-index: 30;
+  inset-block: calc(2.75rem + 1px) 0;
+  inset-inline-end: 0;
+  display: flex;
+  width: min(var(--panel-width, 35rem), calc(100vw - 22rem));
+  flex-direction: column;
+  border-inline-start: 1px solid var(--line);
+  background: var(--surface);
+}
+.side-panel-bar {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-block-end: 1px solid var(--line);
+  padding-inline: 1.25rem 0.5rem;
+}
+.side-panel-body {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.25rem 1.5rem 2rem;
+}
+.side-panel-handle {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: -0.375rem;
+  width: 0.75rem;
+  z-index: 1;
+}
+/* Markdown shown as written while its parser loads. */
+.markdown-pending {
+  white-space: pre-wrap;
+}
+.note-reading {
+  max-width: 72ch;
+}
+@media (width >= 48rem) {
+  :root[data-side-panel] .shell-body {
+    padding-inline-end: calc(
+      min(var(--panel-width, 35rem), 100vw - 22rem) + 1.5rem
+    );
+  }
+}
+@media (width < 48rem) {
+  .side-panel {
+    inset: 0;
+    width: auto;
+    border: 0;
+    padding-block-start: env(safe-area-inset-top);
+    padding-block-end: env(safe-area-inset-bottom);
+  }
+  .side-panel-bar {
+    padding-inline: max(0.5rem, env(safe-area-inset-left))
+      max(0.5rem, env(safe-area-inset-right));
+  }
+  .side-panel-body {
+    padding-inline: max(1rem, env(safe-area-inset-left))
+      max(1rem, env(safe-area-inset-right));
+  }
+  body:has(.side-panel) {
+    overflow: hidden;
+  }
+}
+
+/* Page-level pieces outside the reader. */
+/* A native <progress> with token colours: an empty rail and an accent
+   value in both themes (WebKit and Firefox draw it differently). */
+.meter {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 0.5rem;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: var(--control);
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: var(--accent);
+}
+.meter::-webkit-progress-bar {
+  border-radius: 999px;
+  background: var(--control);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.meter::-webkit-progress-value {
+  border-radius: 999px;
+  background: var(--accent);
+}
+.meter::-moz-progress-bar {
+  border-radius: 999px;
+  background: var(--accent);
+}
+/* Reading progress of one day in the Days list: a thin bar in the "done"
+   colour. */
+.day-meter {
+  max-width: 16rem;
+  height: 0.25rem;
+  color: var(--good);
+}
+.day-meter::-webkit-progress-value {
+  background: var(--good);
+}
+.day-meter::-moz-progress-bar {
+  background: var(--good);
+}
+/* Days calendar: a filled dot under a date with a digest, a ring under a
+   date with papers and no digest. The dot hangs below the number, so marked
+   and unmarked dates keep the same baseline. */
+:is(.day-digest, .day-listing) > button {
+  position: relative;
+}
+:is(.day-digest, .day-listing) > button::after,
+.day-mark::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+:is(.day-digest, .day-listing) > button::after {
+  position: absolute;
+  bottom: 3px;
+  left: calc(50% - 2.5px);
+}
+.day-digest > button::after,
+.day-mark-digest::before {
+  background: var(--good);
+}
+.day-listing > button::after,
+.day-mark-listing::before {
+  box-shadow: inset 0 0 0 1.5px var(--muted);
+}
+.day-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+/* Day pages from tablet width up: the paper list and the reader sit side by
+   side under the top bar and each scrolls on its own, so opening a paper
+   never moves the list or the page. The divider sets the list's width. */
+@media (width >= 48rem) {
+  .shell-body:has(.reader-split) {
+    padding-block: 0;
+  }
+  .reader-split {
+    display: grid;
+    grid-template-columns:
+      min(var(--list-width, 26rem), max(17.5rem, 100% - 26rem))
+      0.75rem minmax(0, 1fr);
+    gap: 0;
+    height: calc(100dvh - 2.75rem - 1px);
+  }
+  /* A page whose title sits above its two columns (Projects): the columns
+     take what is left of the window under the header. */
+  .reader-workspace {
+    height: calc(100dvh - 2.75rem - 1px);
+    gap: 0;
+    padding-top: 1.25rem;
+  }
+  .reader-workspace > .reader-split {
+    flex: 1;
+    min-height: 0;
+    height: auto;
+  }
+  .reader-split[data-pdf-shown] {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: 1.25rem;
+  }
+  /* Two boxes with the same top and bottom: the list's box holds the day,
+     its topics, the brief entry and the papers as plain rows. */
+  /* Each column is the containing block of what it holds, so screen-reader
+     text (position: absolute) scrolls and clips with it instead of
+     stretching the page. */
+  .reader-list-pane {
+    position: relative;
+    display: flex;
+    min-height: 0;
+    min-width: 0;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin-block: 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg, 10px);
+    background: var(--surface);
+    padding: 1.25rem 0.75rem 1.5rem 1.25rem;
+  }
+  .reader-list-pane [aria-label="Paper list"] {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    margin-inline-start: -0.5rem;
+  }
+  .reader-list-pane .listing-header {
+    padding-inline-end: 0.5rem;
+  }
+  .reader-split > .reading-pane {
+    position: relative;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin-block: 1rem;
+  }
+  .reader-split[data-pdf-shown] > .reader-panel:last-child {
+    position: static;
+    height: auto;
+    margin-block: 1rem;
+  }
+  .split-handle {
+    cursor: col-resize;
+    touch-action: none;
+  }
+  .reader-split > .split-handle {
+    position: relative;
+  }
+  .split-handle::after {
+    content: "";
+    position: absolute;
+    inset-inline: calc(50% - 2px);
+    top: calc(50% - 1rem);
+    height: 2rem;
+    border-radius: 2px;
+    background: var(--line);
+  }
+  .split-handle:hover::after,
+  .split-handle:focus-visible::after {
+    background: var(--accent);
+  }
+}
+
+@media (width < 48rem) {
+  :root {
+    --phone-nav-height: calc(57px + env(safe-area-inset-bottom));
+    scroll-padding-block-end: calc(var(--phone-nav-height) + 8px);
+  }
+
+  :is(button, select, a[role="button"], [data-slot="button"]) {
+    min-inline-size: 44px;
+    min-block-size: 44px;
+  }
+
+  :is(input:not([type="checkbox"], [type="radio"]), select, textarea) {
+    max-inline-size: 100%;
+    min-block-size: 44px;
+    font-size: 16px;
+  }
+
+  button[data-slot="button"]:not([data-size^="icon"]),
+  a[data-slot="button"] {
+    max-inline-size: 100%;
+    height: auto;
+    white-space: normal;
+  }
+
+  .reader-page {
+    overflow-wrap: anywhere;
+    gap: 1rem;
+  }
+
+  .reader-page a:not(.markdown a, [data-slot="button"]) {
+    display: inline-block;
+    min-block-size: 44px;
+    min-inline-size: 44px;
+    align-content: center;
+  }
+
+  .reader-page summary {
+    min-block-size: 44px;
+    align-content: center;
+  }
+
+  .reader-header {
+    align-items: start;
+    gap: 0.625rem;
+  }
+
+  .reader-title {
+    font-size: 28px;
+  }
+
+  .reader-header-actions {
+    margin-inline-start: 0;
+    justify-content: start;
+  }
+
+  .listing-header .reader-header-actions {
+    grid-area: 1 / 2;
+    justify-content: end;
+    gap: 0.25rem;
+  }
+
+  .listing-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .listing-header .reader-header-copy {
+    display: contents;
+  }
+
+  .listing-header .reader-header-context {
+    grid-area: 1 / 1;
+  }
+
+  /* With search in the phone header, the date switcher takes the row. */
+  .listing-header:not(:has(.reader-header-actions)) .reader-header-context {
+    grid-column: 1 / -1;
+  }
+
+  .listing-header :is(h1, p) {
+    grid-column: 1 / -1;
+  }
+
+  .filters-popover {
+    position-area: none;
+    inset: auto 0 0 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border-radius: 12px 12px 0 0;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  }
+
+  .app-shell {
+    padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+  }
+
+  .phone-brand {
+    padding-top: max(0.25rem, env(safe-area-inset-top));
+    padding-bottom: 0.25rem;
+  }
+
+  .phone-content {
+    padding-bottom: var(--phone-nav-height);
+  }
+
+  .phone-nav {
+    padding-inline: max(0.5rem, env(safe-area-inset-left))
+      max(0.5rem, env(safe-area-inset-right));
+    padding-block-end: calc(4px + env(safe-area-inset-bottom));
+  }
+
+  .phone-nav-item {
+    @apply flex min-h-12 flex-1 flex-col items-center justify-center gap-0.5 rounded-sm text-xs font-medium text-subtle;
+  }
+
+  .phone-nav-item:is([aria-current="page"], [data-active="true"]) {
+    @apply bg-row-on font-semibold text-foreground;
+  }
+
+  .phone-brief-toggle {
+    @apply flex min-h-12 w-full items-center gap-2 rounded-xl px-3.5 text-left;
+  }
+
+  .phone-brief-toggle[aria-expanded="true"] svg {
+    rotate: 180deg;
+  }
+
+  .reading-pane {
+    display: none;
+  }
+
+  body:has([data-phone-reading]) {
+    overflow: hidden;
+  }
+
+  .app-shell:has([data-phone-reading]) .phone-chrome,
+  [data-phone-reading]
+    :is(.listing-header, .morning-brief, .paper-filters, .paper-list-column) {
+    visibility: hidden;
+  }
+
+  [data-phone-reading] .reading-pane {
+    @apply fixed inset-0 z-40 block overflow-y-auto border-0 bg-background;
+    border-radius: 0;
+    overscroll-behavior: contain;
+    scroll-padding-block-start: calc(56px + env(safe-area-inset-top));
+    padding: 0 max(1rem, env(safe-area-inset-right))
+      calc(1.5rem + env(safe-area-inset-bottom))
+      max(1rem, env(safe-area-inset-left));
+  }
+
+  /* A paper on a phone: no bar at the top, the moves at the bottom. */
+  [data-phone-reading] .reading-pane:has(> .phone-reader-nav) {
+    padding-block: max(1rem, env(safe-area-inset-top)) 0;
+    scroll-padding-block: 0 calc(68px + env(safe-area-inset-bottom));
+  }
+
+  .phone-reading-bar {
+    @apply sticky top-0 z-10 mb-4 flex items-center justify-between gap-2 border-b bg-background pb-1;
+    padding-top: max(0.25rem, env(safe-area-inset-top));
+  }
+
+  /* Back, Previous and Next stay at the bottom of the screen while a paper
+     is read, edge to edge, above the home indicator. */
+  .phone-reader-nav {
+    @apply z-10 grid grid-cols-[auto_1fr_1fr] gap-2 border-t bg-background;
+    position: sticky;
+    bottom: 0;
+    margin-block-start: 1.5rem;
+    margin-inline: calc(-1 * max(1rem, env(safe-area-inset-left)))
+      calc(-1 * max(1rem, env(safe-area-inset-right)));
+    padding: 0.5rem max(1rem, env(safe-area-inset-right))
+      calc(0.5rem + env(safe-area-inset-bottom))
+      max(1rem, env(safe-area-inset-left));
+  }
+
+  [data-slot="dialog-content"] {
+    max-block-size: calc(100dvh - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  [data-slot="dialog-content"].phone-sheet {
+    inset: auto 0 0;
+    translate: none;
+    max-inline-size: none;
+    max-block-size: 85dvh;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding-inline: max(1rem, env(safe-area-inset-left))
+      max(1rem, env(safe-area-inset-right));
+    padding-block-end: calc(1.25rem + env(safe-area-inset-bottom));
+  }
+
+  [data-slot="dialog-close"] {
+    @apply inline-flex items-center justify-center;
+    top: 8px;
+    right: 8px;
+  }
+
+  [data-slot="command-input-wrapper"] {
+    padding-inline-end: 3.25rem;
+  }
+
+  [data-slot="dialog-content"]:has([data-slot="command"])
+    [data-slot="dialog-close"] {
+    top: 2px;
+    right: 2px;
+  }
+
+  [data-slot="command-item"] {
+    min-block-size: 44px;
+  }
+
+  .library-filter-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .library-filter-form label:has([name="q"]),
+  .library-filter-form [role="alert"] {
+    grid-column: 1 / -1;
+  }
+
+  .library-filter-form :is(input:not([type="checkbox"]), select) {
+    inline-size: 100%;
+  }
+
+  .library-results,
+  .library-results :is(tbody, tr, td) {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .library-results tbody > tr {
+    padding-block: 0.5rem;
+  }
+
+  .library-results td {
+    padding-block: 0.25rem;
+    white-space: normal;
+  }
+
+  .library-results .library-status {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  .library-results .library-status [data-slot="button"] {
+    white-space: nowrap;
+  }
+
+  .rdp-month {
+    gap: 0.625rem;
+  }
+
+  .rdp-week {
+    margin-top: 2px;
+  }
+
+  .rdp-day button {
+    height: 44px;
+    aspect-ratio: auto;
+  }
+
+  .markdown pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* An open PDF takes the space: the top bar and the page drop their shared
+   88rem cap together, so their edges stay aligned. Unlayered, so it wins
+   over the max-width utility. */
+body:has([data-pdf-open]) .page-frame {
+  max-width: none;
+}
+
+/* Motion (2026-11-20): short entrances only, opacity and transform on the
+   compositor; movement only for people who have not asked for reduced
+   motion. Nothing loops, nothing runs on its own after it settles. */
+@media (prefers-reduced-motion: no-preference) {
+  /* On the page frame, which is there once per visit. A loading page and
+     the page that replaces it are two <main> elements, so an entrance on
+     main played twice in a row. */
+  .page-enter {
+    animation: page-in 200ms ease-out backwards;
+  }
+  .reading-pane,
+  [data-pdf-open] {
+    animation: pane-in 180ms ease-out backwards;
+  }
+  .trend-bar {
+    transform-origin: bottom;
+    animation: bar-grow 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 18ms);
+  }
+}
+/* A loading placeholder appears only after 200 ms, so an answer that comes
+   sooner swaps in with no flash of a loader between two pages. Its words are
+   announced at once; only what is seen waits. Opacity alone, so it also
+   applies with reduced motion. */
+.loading-state {
+  animation: loading-in 120ms ease-out 200ms backwards;
+}
+@keyframes loading-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+@keyframes pane-in {
+  from {
+    opacity: 0;
+    translate: 8px 0;
+  }
+}
+@keyframes bar-grow {
+  from {
+    scale: 1 0;
+  }
+}
+
+/* Native popovers (Filters, the ⋮ menus) fade in, and out where the browser
+   can keep them in the top layer while they leave. */
+[popover] {
+  opacity: 0;
+  transition-property: opacity, scale, display, overlay;
+  transition-duration: 140ms;
+  transition-timing-function: ease-out;
+  transition-behavior: allow-discrete;
+  @media (prefers-reduced-motion: no-preference) {
+    scale: 0.98;
+  }
+}
+[popover]:popover-open {
+  opacity: 1;
+  @starting-style {
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    scale: 1;
+    @starting-style {
+      scale: 0.98;
+    }
+  }
+}

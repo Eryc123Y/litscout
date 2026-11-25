@@ -1,0 +1,30 @@
+name: CI
+# Checks run locally before merging: `nice -n 10 pnpm verify` (see docs/self-host.md).
+# This workflow only runs when started by hand, so it uses no Actions minutes otherwise.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm verify
+      - name: Upload the rehearsal transcript
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rehearsal-transcript
+          path: .artifacts/rehearsal.json
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,21 @@
+[Unit]
+Description=LitScout compressed state snapshot (online, while the server runs)
+
+[Service]
+Type=oneshot
+User=litscout
+Group=litscout
+ExecStart=/usr/bin/python3 -I /home/litscout/litscout/current/scripts/snapshot.py /home/litscout/litscout/state /home/litscout/litscout/backups --keep 7
+Nice=15
+IOSchedulingClass=idle
+MemoryMax=300M
+CPUQuota=50%
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/litscout/litscout/state /home/litscout/litscout/backups
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX
+UMask=0077

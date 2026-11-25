@@ -1,0 +1,322 @@
+[
+  {
+    "existing": [],
+    "batch": [
+      {
+        "record": {
+          "id": "a",
+          "title": "A stereo method",
+          "authors": [
+            "Ada Lovelace"
+          ]
+        },
+        "abstract": ""
+      },
+      {
+        "record": {
+          "id": "a",
+          "title": "A stereo method",
+          "authors": [
+            "Ada Lovelace"
+          ]
+        },
+        "abstract": ""
+      }
+    ],
+    "lacking": [],
+    "expected": {
+      "fresh": [
+        {
+          "record": {
+            "id": "a",
+            "title": "A stereo method",
+            "authors": [
+              "Ada Lovelace"
+            ],
+            "has_abstract": false
+          },
+          "abstract": ""
+        }
+      ],
+      "duplicates": 1,
+      "gained": {}
+    }
+  },
+  {
+    "existing": [
+      {
+        "id": "a",
+        "title": "A stereo method",
+        "authors": [
+          "Ada Lovelace"
+        ]
+      }
+    ],
+    "batch": [
+      {
+        "record": {
+          "id": "b",
+          "title": "A stereo method",
+          "authors": [
+            "Ada Lovelace"
+          ]
+        },
+        "abstract": ""
+      }
+    ],
+    "lacking": [],
+    "expected": {
+      "fresh": [],
+      "duplicates": 1,
+      "gained": {}
+    }
+  },
+  {
+    "existing": [
+      {
+        "id": "doi:10.1/a",
+        "title": "A stereo method",
+        "authors": [
+          "Ada Lovelace"
+        ],
+        "doi": "https://doi.org/10.1/a"
+      }
+    ],
+    "batch": [
+      {
+        "record": {
+          "id": "b",
+          "title": "A stereo method",
+          "authors": [
+            "Ada Lovelace"
+          ],
+          "doi": "DOI:10.1/A"
+        },
+        "abstract": ""
+      }
+    ],
+    "lacking": [],
+    "expected": {
+      "fresh": [],
+      "duplicates": 1,
+      "gained": {}
+    }
+  },
+  {
+    "existing": [
+      {
+        "id": "a",
+        "title": "A stereo method",
+        "authors": [
+          "Ada Lovelace"
+        ]
+      }
+    ],
+    "batch": [
+      {
+        "record": {
+          "id": "b",
+          "title": "A stereo-methods",
+          "authors": [
+            "Lovelace, Ada"
+          ]
+        },
+        "abstract": ""
+      }
+    ],
+    "lacking": [],
+    "expected": {
+      "fresh": [],
+      "duplicates": 1,
+      "gained": {}
+    }
+  },
+  {
+    "existing": [
+      {
+        "id": "a",
+        "title": "A stereo method",
+        "authors": [
+          "Ada Lovelace"
+        ]
+      }
+    ],
+    "batch": [
+      {
+        "record": {
+          "id": "b",
+          "title": "Completely unrelated",
+          "authors": [
+            "Ada Lovelace"
+          ]
+        },
+        "abstract": ""
+      }
+    ],
+    "lacking": [],
+    "expected": {
+      "fresh": [
+        {
+          "record": {
+            "id": "b",
+            "title": "Completely unrelated",
+            "authors": [
+              "Ada Lovelace"
+            ]
+          },
+          "abstract": ""
+        }
+      ],
+      "duplicates": 0,
+      "gained": {}
+    }
+  },
+  {
+    "existing": [
+      {
+        "id": "a",
+        "title": "A stereo method",
+        "authors": [
+          "Ada Lovelace"
+        ]
+      }
+    ],
+    "batch": [
+      {
+        "record": {
+          "id": "a",
+          "title": "A stereo method",
+          "authors": [
+            "Ada Lovelace"
+          ]
+        },
+        "abstract": "new abstract"
+      },
+      {
+        "record": {
+          "id": "a",
+          "title": "A stereo method",
+          "authors": [
+            "Ada Lovelace"
+          ]
+        },
+        "abstract": "second"
+      }
+    ],
+    "lacking": [
+      "a"
+    ],
+    "expected": {
+      "fresh": [],
+      "duplicates": 1,
+      "gained": {
+        "a": "new abstract"
+      }
+    }
+  },
+  {
+    "existing": [],
+    "batch": [
+      {
+        "record": {
+          "id": "a",
+          "title": "A stereo method",
+          "authors": [
+            "Ada Lovelace"
+          ]
+        },
+        "abstract": ""
+      },
+      {
+        "record": {
+          "id": "a",
+          "title": "A stereo method",
+          "authors": [
+            "Ada Lovelace"
+          ],
+          "doi": "10.1/a",
+          "oa_url": "https://example.org/paper"
+        },
+        "abstract": "first"
+      }
+    ],
+    "lacking": [],
+    "expected": {
+      "fresh": [
+        {
+          "record": {
+            "id": "a",
+            "title": "A stereo method",
+            "authors": [
+              "Ada Lovelace"
+            ],
+            "doi": "10.1/a",
+            "oa_url": "https://example.org/paper",
+            "has_abstract": true
+          },
+          "abstract": "first"
+        }
+      ],
+      "duplicates": 1,
+      "gained": {}
+    }
+  },
+  {
+    "existing": [
+      {
+        "id": "a",
+        "title": "café stereo",
+        "authors": [
+          "Émile Zola"
+        ]
+      }
+    ],
+    "batch": [
+      {
+        "record": {
+          "id": "b",
+          "title": "cafe stereo",
+          "authors": [
+            "Zola, Emile"
+          ]
+        },
+        "abstract": ""
+      }
+    ],
+    "lacking": [],
+    "expected": {
+      "fresh": [],
+      "duplicates": 1,
+      "gained": {}
+    }
+  },
+  {
+    "existing": [
+      {
+        "id": "a",
+        "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "authors": [
+          "Ada Lovelace"
+        ]
+      }
+    ],
+    "batch": [
+      {
+        "record": {
+          "id": "b",
+          "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "authors": [
+            "Ada Lovelace"
+          ]
+        },
+        "abstract": ""
+      }
+    ],
+    "lacking": [],
+    "expected": {
+      "fresh": [],
+      "duplicates": 1,
+      "gained": {}
+    }
+  }
+]

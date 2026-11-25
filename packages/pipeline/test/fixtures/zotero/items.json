@@ -1,0 +1,18 @@
+[
+  {
+    "id": "vision",
+    "type": "article-journal",
+    "title": "A Vision Study",
+    "author": [{ "family": "García", "given": "Ana" }, { "literal": "Vision Lab" }],
+    "issued": { "date-parts": [[2024, 3, 7]] },
+    "DOI": "10.1000/vision",
+    "URL": "https://publisher.example/vision",
+    "container-title": "Vision Journal",
+    "abstract": "The exported abstract.",
+    "keyword": "vision, depth",
+    "collections": [{ "name": "Reading" }],
+    "tags": [{ "tag": "shelf" }]
+  },
+  { "title": 42 },
+  { "title": "A title alone" }
+]

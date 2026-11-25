@@ -1,0 +1,17 @@
+packages:
+  - apps/*
+  - packages/*
+overrides:
+  undici: 7.30.1
+allowBuilds:
+  better-sqlite3: true
+  esbuild: true
+  workerd: true
+  core-js-pure: false
+auditConfig:
+  ignoreGhsas:
+    # picomatch <=4.0.7 ReDoS (GHSA-fc5q-39xc-vjpf), no patched release yet (checked 2026-11-18).
+    # Reached only through build tooling (agents > @rolldown/plugin-babel > vite > picomatch);
+    # the bundled Worker contains no picomatch and no untrusted glob patterns are ever matched.
+    # Remove this entry as soon as a fixed picomatch is published; re-check by 2026-12-01.
+    - GHSA-fc5q-39xc-vjpf

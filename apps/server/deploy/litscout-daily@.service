@@ -1,0 +1,35 @@
+[Unit]
+Description=LitScout scheduled run (%i)
+After=network-online.target litscout-server.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=litscout
+Group=litscout
+WorkingDirectory=/home/litscout/litscout
+Environment=HOME=/home/litscout
+Environment=PATH=/home/litscout/.local/node/bin:/home/litscout/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=LITSCOUT_NODE=/home/litscout/.local/node/bin/node
+# Source keys for the fetch (OPENALEX_API_KEY, OPENREVIEW_USERNAME and
+# OPENREVIEW_PASSWORD or OPENREVIEW_TOKEN, S2_API_KEY), mode 600. Optional.
+EnvironmentFile=-/home/litscout/litscout/etc/sources.env
+ExecStart=/home/litscout/litscout/current/scripts/daily-run.sh %i
+TimeoutStartSec=4h
+# One agent at a time: 1 GiB and one core, at low priority.
+MemoryHigh=900M
+MemoryMax=1G
+CPUQuota=100%
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=6
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ReadWritePaths=/home/litscout
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+CapabilityBoundingSet=
+UMask=0077

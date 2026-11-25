@@ -1,0 +1,7 @@
+pnpm-lock.yaml
+coverage
+dist
+node_modules
+**/test/fixtures/**
+
+# Design exports from the Claude Design canvas, kept byte-for-byte as reference

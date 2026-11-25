@@ -1,0 +1,26 @@
+{
+  "files": [
+    {
+      "file": "arxiv-new.html",
+      "url": "https://arxiv.org/list/cs.CV/new?show=2000",
+      "recordedAt": "2026-11-17T03:29:56.690Z",
+      "originalSha256": "bd4eed728f538be856fdce6c90715653beb453831286d29ec169a14dfd7473bb",
+      "recordedSha256": "bd4eed728f538be856fdce6c90715653beb453831286d29ec169a14dfd7473bb"
+    },
+    {
+      "file": "arxiv-recent.html",
+      "url": "https://arxiv.org/list/cs.CV/recent?show=2000",
+      "recordedAt": "2026-11-17T03:29:59.993Z",
+      "originalSha256": "fdcc61e7ef9518e252cec3962af91ebab9dcf3a554bf9901887dc5220153a6d6",
+      "recordedSha256": "fdcc61e7ef9518e252cec3962af91ebab9dcf3a554bf9901887dc5220153a6d6"
+    }
+  ],
+  "excerpts": [
+    {
+      "file": "arxiv-friday-excerpt.html",
+      "source": "arxiv-recent.html",
+      "selection": "Exact Friday 13 Nov 2026 dl block, wrapped in #dlpage; no dates or records changed.",
+      "note": "A past /new page cannot be re-fetched from arXiv; stale-date regression uses this recorded /recent excerpt."
+    }
+  ]
+}

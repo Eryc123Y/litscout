@@ -1,0 +1,126 @@
+{
+  "id": "https://openalex.org/W2046766973",
+  "doi": "https://doi.org/10.1371/journal.pone.0000308",
+  "display_name": "Sharing Detailed Research Data Is Associated with Increased Citation Rate",
+  "publication_year": 2007,
+  "primary_location": {
+    "landing_page_url": "https://doi.org/10.1371/journal.pone.0000308",
+    "pdf_url": null,
+    "license": "cc-by",
+    "source": {
+      "display_name": "PLoS ONE"
+    }
+  },
+  "authorships": [
+    {
+      "author": {
+        "id": "https://openalex.org/A5048491430",
+        "display_name": "Heather Piwowar"
+      }
+    },
+    {
+      "author": {
+        "id": "https://openalex.org/A5109883106",
+        "display_name": "Roger Day"
+      }
+    },
+    {
+      "author": {
+        "id": "https://openalex.org/A5032027675",
+        "display_name": "Douglas B. Fridsma"
+      }
+    }
+  ],
+  "best_oa_location": {
+    "landing_page_url": "https://doi.org/10.1371/journal.pone.0000308",
+    "pdf_url": null,
+    "license": "cc-by",
+    "source": {
+      "display_name": "PLoS ONE"
+    }
+  },
+  "open_access": {
+    "is_oa": true,
+    "oa_status": "gold",
+    "oa_url": "https://doi.org/10.1371/journal.pone.0000308",
+    "any_repository_has_fulltext": true
+  },
+  "locations": [
+    {
+      "landing_page_url": "https://doi.org/10.1371/journal.pone.0000308",
+      "pdf_url": null,
+      "license": "cc-by",
+      "source": {
+        "display_name": "PLoS ONE"
+      }
+    },
+    {
+      "landing_page_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1817752/",
+      "pdf_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1817752/pdf/",
+      "license": "cc-by",
+      "source": {
+        "display_name": "PubMed Central"
+      }
+    },
+    {
+      "landing_page_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/1817752",
+      "pdf_url": null,
+      "license": "cc-by",
+      "source": {
+        "display_name": "Europe PMC (PubMed Central)"
+      }
+    },
+    {
+      "landing_page_url": "https://pubmed.ncbi.nlm.nih.gov/17375194",
+      "pdf_url": null,
+      "license": null,
+      "source": {
+        "display_name": "PubMed"
+      }
+    },
+    {
+      "landing_page_url": "https://d-scholarship.pitt.edu/12859/8/licence.txt",
+      "pdf_url": null,
+      "license": null,
+      "source": {
+        "display_name": "D-Scholarship@Pitt (University of Pittsburgh)"
+      }
+    },
+    {
+      "landing_page_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0000308",
+      "pdf_url": null,
+      "license": null,
+      "source": {
+        "display_name": "RePEc: Research Papers in Economics"
+      }
+    },
+    {
+      "landing_page_url": "https://doaj.org/article/8fafaa9ad5ff4b3fa1525b29d957b01d",
+      "pdf_url": null,
+      "license": "cc-by-sa",
+      "source": {
+        "display_name": "DOAJ (DOAJ: Directory of Open Access Journals)"
+      }
+    },
+    {
+      "landing_page_url": "https://figshare.com/articles/dataset/Sharing_Detailed_Research_Data_Is_Associated_with_Increased_Citation_Rate/152356",
+      "pdf_url": null,
+      "license": "cc-by",
+      "source": {
+        "display_name": "Figshare"
+      }
+    },
+    {
+      "landing_page_url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.276.8308",
+      "pdf_url": null,
+      "license": null,
+      "source": null
+    },
+    {
+      "landing_page_url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.279.640",
+      "pdf_url": null,
+      "license": null,
+      "source": null
+    }
+  ]
+}

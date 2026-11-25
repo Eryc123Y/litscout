@@ -1,0 +1,10 @@
+[Unit]
+Description=Weekly update of LitScout's agent CLIs (Monday before the morning run)
+
+[Timer]
+OnCalendar=Mon *-*-* 05:30:00 Asia/Shanghai
+Persistent=true
+Unit=litscout-clients@update.service
+
+[Install]
+WantedBy=timers.target

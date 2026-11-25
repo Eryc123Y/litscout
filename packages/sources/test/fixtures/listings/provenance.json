@@ -1,0 +1,18 @@
+{
+  "referenceCommit": "6b0db86d35af43df61b9404a5a2cf7a153a0825a",
+  "parserSha256": "25596a205fd74b26313a0d9a3974bcb2d1bc11b2607e547a4af02a2857600cb5",
+  "fresh": [
+    {
+      "file": "fresh_new_cs_CV.html",
+      "url": "https://arxiv.org/list/cs.CV/new?show=2000",
+      "sha256": "bd4eed728f538be856fdce6c90715653beb453831286d29ec169a14dfd7473bb",
+      "recordedAt": "2026-11-17"
+    },
+    {
+      "file": "fresh_recent_cs_CV.html",
+      "url": "https://arxiv.org/list/cs.CV/recent?show=2000",
+      "sha256": "fdcc61e7ef9518e252cec3962af91ebab9dcf3a554bf9901887dc5220153a6d6",
+      "recordedAt": "2026-11-17"
+    }
+  ]
+}

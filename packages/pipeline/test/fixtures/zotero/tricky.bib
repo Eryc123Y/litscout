@@ -1,0 +1,19 @@
+% Exported citations
+@string{venue = "Proceedings of " # {the Test Society}}
+@comment{Ignored @article{inside, title={Not an entry}}}
+@preamble{"Ignored"}
+@inproceedings(vision,
+  title = {On {Stereo} \& Depth},
+  author = {Garc{\'i}a, Ana and {Research and Development Lab}},
+  year = 2024,
+  booktitle = VENUE,
+  doi = {https://doi.org/10.1000/VISION},
+  eprint = {2401.00042v3},
+  archivePrefix = {arXiv},
+  keywords = {vision, {depth, binocular}},
+  groups = {Reading, Stereo/Methods},
+  abstract = "A {quoted "term"} and \"literal\" escape."
+)
+@article{broken,
+  title = {Missing terminator
+@article{recovered, title={After the error}, year=2020}

@@ -1,0 +1,53 @@
+[Unit]
+Description=LitScout server (the Worker bundle on workerd, with local data)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=litscout
+Group=litscout
+WorkingDirectory=/home/litscout/litscout/current
+Environment=PATH=/home/litscout/.local/node/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/litscout/.local/node/bin/node dist/server.js serve --config /home/litscout/litscout/etc/server.json
+Restart=on-failure
+RestartSec=15
+# A stop ends the process by SIGTERM (exit status 143): not a failure.
+SuccessExitStatus=143
+TimeoutStopSec=30
+KillMode=mixed
+# Limits: the proxy and other services on this machine come first.
+MemoryHigh=600M
+MemoryMax=800M
+CPUQuota=100%
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=6
+# Hardening: only the state folder is writable.
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/litscout/litscout/state
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+PrivateDevices=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectProc=invisible
+ProcSubset=pid
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+SystemCallArchitectures=native
+UMask=0077
+# Not set: MemoryDenyWriteExecute, since V8 compiles code at run time.
+
+[Install]
+WantedBy=multi-user.target

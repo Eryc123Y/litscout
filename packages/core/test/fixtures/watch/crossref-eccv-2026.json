@@ -1,0 +1,202 @@
+{
+ "status": "ok",
+ "message-type": "work-list",
+ "message": {
+  "next-cursor": "MTc5MTEyNzI5OTAwMCwxMC4xMDA3JTJGOTc4LTMtMDMyLTM3MDg2LTBfNQ==",
+  "total-results": 36,
+  "items": [
+   {
+    "DOI": "10.1007/978-3-032-37086-0_36",
+    "title": [
+     "Semantic-Geometric Dual Compression: Training-Free Visual Token Reduction for Ultra-High-Resolution Remote Sensing Understanding"
+    ],
+    "author": [
+     {
+      "given": "Yueying",
+      "family": "Li"
+     },
+     {
+      "given": "Fengxiang",
+      "family": "Wang"
+     },
+     {
+      "given": "Yan",
+      "family": "Li"
+     },
+     {
+      "given": "Mingshuo",
+      "family": "Chen"
+     },
+     {
+      "given": "Mengying",
+      "family": "Zhao"
+     },
+     {
+      "given": "Long",
+      "family": "Lan"
+     }
+    ],
+    "created": {
+     "date-parts": [
+      [
+       2026,
+       10,
+       4
+      ]
+     ],
+     "date-time": "2026-10-04T15:16:36Z"
+    },
+    "published": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "issued": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "type": "book-chapter",
+    "container-title": [
+     "Lecture Notes in Computer Science",
+     "Computer Vision – ECCV 2026"
+    ]
+   },
+   {
+    "DOI": "10.1007/978-3-032-37086-0_4",
+    "title": [
+     "PriSM: Parsing and Style-Mixed Consistency for Unsupervised Domain Adaptation in Facial Landmark Detection"
+    ],
+    "author": [
+     {
+      "given": "Chieh-Yu",
+      "family": "Yang"
+     },
+     {
+      "given": "Hou-Ning",
+      "family": "Hu"
+     },
+     {
+      "given": "Sykai",
+      "family": "Chen"
+     },
+     {
+      "given": "Yu-Lun",
+      "family": "Liu"
+     },
+     {
+      "given": "Yen-Yu",
+      "family": "Lin"
+     }
+    ],
+    "created": {
+     "date-parts": [
+      [
+       2026,
+       10,
+       4
+      ]
+     ],
+     "date-time": "2026-10-04T15:16:48Z"
+    },
+    "published": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "issued": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "type": "book-chapter",
+    "container-title": [
+     "Lecture Notes in Computer Science",
+     "Computer Vision – ECCV 2026"
+    ]
+   },
+   {
+    "DOI": "10.1007/978-3-032-37086-0_9",
+    "title": [
+     "A4-Agent: An Agentic Framework for Zero-Shot Affordance Reasoning"
+    ],
+    "author": [
+     {
+      "given": "Zixin",
+      "family": "Zhang"
+     },
+     {
+      "given": "Kanghao",
+      "family": "Chen"
+     },
+     {
+      "given": "Hanqing",
+      "family": "Wang"
+     },
+     {
+      "given": "Hongfei",
+      "family": "Zhang"
+     },
+     {
+      "given": "Harold Haodong",
+      "family": "Chen"
+     },
+     {
+      "given": "Chenfei",
+      "family": "Liao"
+     },
+     {
+      "given": "Litao",
+      "family": "Guo"
+     },
+     {
+      "given": "Yinchuan",
+      "family": "Li"
+     },
+     {
+      "given": "Ying-Cong",
+      "family": "Chen"
+     }
+    ],
+    "created": {
+     "date-parts": [
+      [
+       2026,
+       10,
+       4
+      ]
+     ],
+     "date-time": "2026-10-04T15:17:00Z"
+    },
+    "published": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "issued": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "type": "book-chapter",
+    "container-title": [
+     "Lecture Notes in Computer Science",
+     "Computer Vision – ECCV 2026"
+    ]
+   }
+  ],
+  "items-per-page": 200
+ }
+}

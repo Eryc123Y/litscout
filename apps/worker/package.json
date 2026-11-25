@@ -1,0 +1,30 @@
+{
+  "name": "@litscout/worker",
+  "version": "0.0.0",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts",
+    "./test/*": "./test/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "bench:ingest": "tsx scripts/bench-ingest.ts",
+    "bench:read": "tsx scripts/bench-read.ts",
+    "bench:hot-path": "tsx scripts/bench-hot-path.ts"
+  },
+  "dependencies": {
+    "@cloudflare/workers-oauth-provider": "1.2.3",
+    "@litscout/db": "workspace:*",
+    "@litscout/mcp": "workspace:*",
+    "@litscout/pipeline": "workspace:*",
+    "@litscout/sources": "workspace:*",
+    "agents": "0.28.1",
+    "drizzle-orm": "0.45.2",
+    "hono": "^4.0.0",
+    "jose": "^6.0.0",
+    "zod": "4.6.7"
+  }
+}

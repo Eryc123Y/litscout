@@ -1,0 +1,7 @@
+{
+  "referenceCommit": "6b0db86d35af43df61b9404a5a2cf7a153a0825a",
+  "dataCommit": "082a2bc904487aa6a9a7a859909ae48a34b0bbb3",
+  "interestsSha256": "b89e1a1811aaf60d610b98b80bdf7da57b067737b34e4a89545fd17b8d9cca6b",
+  "dedupeSha256": "3a448302dedf5a96c255e43d5d3856f0ef34e6acff1907713b251979d322b474",
+  "sampling": "first 20 raw rows of each of five weekdays; no model call"
+}

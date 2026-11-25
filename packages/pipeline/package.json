@@ -1,0 +1,21 @@
+{
+  "name": "@litscout/pipeline",
+  "version": "0.0.0",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts",
+    "./test/*": "./test/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@litscout/core": "workspace:*",
+    "@litscout/i18n": "workspace:*",
+    "@noble/hashes": "^2.4.0",
+    "zod": "^4.6.7"
+  }
+}

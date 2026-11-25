@@ -1,0 +1,145 @@
+{
+ "status": "ok",
+ "message-type": "work-list",
+ "message": {
+  "next-cursor": "MTc5NTQxMDM2MjAwMCwxMC4xMDA3JTJGOTc4LTMtMDMyLTM3MzcyLTRfMzc=",
+  "total-results": 2,
+  "items": [
+   {
+    "DOI": "10.1007/978-3-032-36987-1_39",
+    "title": [
+     "Correction to: ChartStyle-100K: A Large-Scale Dataset for Structured Visualization Style Transfer"
+    ],
+    "author": [
+     {
+      "given": "Yuwei",
+      "family": "Yang"
+     },
+     {
+      "given": "Tianchi",
+      "family": "Xie"
+     },
+     {
+      "given": "Jinhong",
+      "family": "Ni"
+     },
+     {
+      "given": "Yukai",
+      "family": "Guo"
+     },
+     {
+      "given": "Jing",
+      "family": "Zhang"
+     },
+     {
+      "given": "Liang",
+      "family": "Zheng"
+     },
+     {
+      "given": "Yalong",
+      "family": "Bai"
+     },
+     {
+      "given": "Yuhui",
+      "family": "Yuan"
+     }
+    ],
+    "created": {
+     "date-parts": [
+      [
+       2026,
+       11,
+       19
+      ]
+     ],
+     "date-time": "2026-11-19T08:37:50Z"
+    },
+    "published": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "issued": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "type": "book-chapter",
+    "container-title": [
+     "Lecture Notes in Computer Science",
+     "Computer Vision – ECCV 2026"
+    ]
+   },
+   {
+    "DOI": "10.1007/978-3-032-37372-4_37",
+    "title": [
+     "Correction to: SymbOmni: Evolving Agentic Omni Models via Symbolic Concept Learning"
+    ],
+    "author": [
+     {
+      "given": "Jinxiu",
+      "family": "Liu"
+     },
+     {
+      "given": "Jianru",
+      "family": "Li"
+     },
+     {
+      "given": "Tanqing",
+      "family": "Kuang"
+     },
+     {
+      "given": "Xuanming",
+      "family": "Liu"
+     },
+     {
+      "given": "Kangfu",
+      "family": "Mei"
+     },
+     {
+      "given": "Yandong",
+      "family": "Wen"
+     },
+     {
+      "given": "Weiyang",
+      "family": "Liu"
+     }
+    ],
+    "created": {
+     "date-parts": [
+      [
+       2026,
+       11,
+       23
+      ]
+     ],
+     "date-time": "2026-11-23T05:06:02Z"
+    },
+    "published": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "issued": {
+     "date-parts": [
+      [
+       2026
+      ]
+     ]
+    },
+    "type": "book-chapter",
+    "container-title": [
+     "Lecture Notes in Computer Science",
+     "Computer Vision – ECCV 2026"
+    ]
+   }
+  ],
+  "items-per-page": 200
+ }
+}

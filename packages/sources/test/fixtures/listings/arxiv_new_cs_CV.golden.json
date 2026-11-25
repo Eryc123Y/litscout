@@ -1,0 +1,82 @@
+[
+  {
+    "id": "2610.37784",
+    "categories": [
+      "cs.CV"
+    ],
+    "pdf": "https://arxiv.org/pdf/2610.37784",
+    "abs": "https://arxiv.org/abs/2610.37784",
+    "authors": [
+      "Clara Lößl",
+      "Fabian Ewald Fassnacht",
+      "Viacheslav Barkov"
+    ],
+    "title": "Sparse tensor networks for individual tree diameter estimation in mixed forests",
+    "comment": null,
+    "summary": "Measurements of tree diameter at breast height (DBH) are fundamental to forest inventories, but manual surveys across entire stands or regions are impractical. UAV-borne laser scanning (ULS) enables scalable automated forest surveys, yet canopy occlusion makes accurate DBH estimation from ULS point clouds non-trivial. Limited stem-level point density of ULS data constrains approaches relying on detailed stem reconstruction, such as Quantitative Structure Models (QSMs) and circle fitting. Empirical machine learning methods based on predefined point cloud metrics are an alternative. New deep learning approaches offer an even more principled solution, allowing models to learn directly from point clouds. Sparse tensor networks have shown particular promise, transforming forestry tasks such as tree species classification. We investigate whether these strengths can be extended to estimate individual tree DBH from ULS data across four mixed-species temperate forest plots in Germany. We further advance existing sparse tensor networks by introducing TreeNext, a lightweight deep learning architecture for direct individual tree parameter estimation from voxelized LiDAR point clouds. We present a fully automated forest inventory pipeline from individual tree instance segmentation to DBH regression, and quantify the impact of segmentation errors by comparing performance on automatically segmented and ground truth instances. TreeNext achieves an $R^2$ of 0.8355 on automatically segmented trees and 0.9380 on ground truth segments, outperforming strong tabular baselines including Random Forest and XGBoost. Segmentation quality emerges as the dominant error source in the automated pipeline. TreeNext proves highly data-efficient, performing well even in small data scenarios. Our findings establish sparse tensor networks as a practical foundation for automated individual tree DBH estimation from ULS."
+  },
+  {
+    "id": "2610.37818",
+    "categories": [
+      "cs.CV",
+      "cs.GR",
+      "cs.RO"
+    ],
+    "pdf": "https://arxiv.org/pdf/2610.37818",
+    "abs": "https://arxiv.org/abs/2610.37818",
+    "authors": [
+      "Allen Tu",
+      "Meher Gitika Karumuri",
+      "Shifan Zhu",
+      "Hailing Wang",
+      "Yen-Liang Lin",
+      "David Held",
+      "Matthias Zwicker",
+      "Tom Goldstein"
+    ],
+    "title": "GOFish: Full Field-of-View Gaussian Splatting and Mesh Extraction",
+    "comment": "Project Page: this https URL",
+    "summary": "Robots, autonomous vehicles, and consumer 360° cameras use fisheye lenses for wide fields of view (FoVs). Simulation-ready digital twins require photorealistic rendering across the full FoV and an aligned collision mesh. However, prior fisheye Gaussian Splatting methods only rasterize up to 180° and do not produce meshes, while Gaussian surface reconstruction methods assume pinhole training images. We present GOFish, the first 3D Gaussian Splatting surface reconstruction method to train directly on fisheye images, rasterize FoVs beyond 180°, and extract an aligned mesh from the same scene. Calibrated densification recovers the surface across the entire FoV, while Calibrated Mip Filtering and Wide-Angle Appearance Modeling keep pixel blur and lens falloff out of the scene and mesh. Across the 200° FIORD and 205° FullCircle benchmarks, GOFish improves PSNR over the best prior method by 2.28 and 1.97 dB, respectively. It also outperforms fisheye rendering baselines within their own FoVs and achieves the highest mesh F-score on FIORD and the main ScanNet++ set. Together, the Gaussian scene and mesh form a LiDAR-free, simulation-ready digital twin that renders in real time, ray traces the full FoV, and provides collision geometry.",
+    "code_url": "https://3dgofish.github.io/"
+  },
+  {
+    "id": "2610.37874",
+    "categories": [
+      "cs.CV",
+      "cs.AI"
+    ],
+    "pdf": "https://arxiv.org/pdf/2610.37874",
+    "abs": "https://arxiv.org/abs/2610.37874",
+    "authors": [
+      "Md. Nakib",
+      "Sudipto Sarkar",
+      "A. J. A. Jubayer Talukder",
+      "Mohammad Ariful Haque"
+    ],
+    "title": "PairCLIP-SWA: Similarity-Guided Balancing and Stochastic Weight Averaging for Generalized Deepfake Image Detection with OpenCLIP",
+    "comment": "15 pages, 8 figures, 12 tables. Code and experiment outputs: this https URL",
+    "summary": "Deepfake detectors are almost always deployed as the single checkpoint that scored best on a validation split, yet the reliability of that choice is rarely measured. We measure it with PairCLIP-SWA, a single-backbone detector that adapts an OpenCLIP ViT-L/14 visual tower by progressive block unfreezing on a class-balanced corpus built by CLIP-similarity-guided one-to-one subsampling, and averages the fine-tuning trajectory in weight space. Trained in-domain on the IEEE SP Cup 2025 (DF-Wild-Cup) benchmark under the same protocol as the strongest published three-backbone ensemble, the weight-averaged detector reaches 97.04% accuracy, 98.64% AU-ROC and a 4.07% equal error rate, against 94.46%, 97.60% and 5.00%. Its training log shows why averaging matters: over the averaged epochs the non-averaged checkpoint swings across 5.34 points of validation accuracy while its validation loss more than doubles, whereas the average is never worse and is up to 5.99 points better. On an OpenForensics-derived benchmark the same instability becomes a misranking: the checkpoint that validation accuracy selects (98.43%) scores 88.85% on a disjoint 10,905-image test partition, rejecting 21.1% of genuine photographs, while the terminal average, ranked last on validation, scores 94.76%. A study of twenty-two in-house configurations on the identical DF-Wild-Cup split, including preprocessing ablations, shows that CLIP pre-training rather than ensembling drives accuracy, that secondary face cropping costs about 34 points, and that frequency-domain inputs transfer poorly. We recommend per-class selection criteria measured off the early-stopping split.",
+    "code_url": "https://github.com/DarkJ0Y/PairCLIP-SWA"
+  },
+  {
+    "id": "2610.37709",
+    "categories": [
+      "eess.IV",
+      "cs.CV",
+      "cs.LG"
+    ],
+    "pdf": "https://arxiv.org/pdf/2610.37709",
+    "abs": "https://arxiv.org/abs/2610.37709",
+    "authors": [
+      "Rafid Ahnaf",
+      "Husne Mubarak",
+      "Fahim Ahsan",
+      "G. M. Refatul Islam",
+      "Rafeed Rahman",
+      "Nabuat Zaman Nahim"
+    ],
+    "title": "Towards Myocardial Infarction Diagnosis: An Investigation into Machine Learning and Deep Learning Algorithms using ECG Data",
+    "comment": "18 pages, 7 figures, 3 tables. Based on the authors' undergraduate thesis at BRAC University (2023)",
+    "summary": "Myocardial Infarction (MI) is a severe and potentially fatal cardiac condition caused by myocardial injury due to ischemia, and timely detection can substantially reduce its mortality. Electrocardiography (ECG) is the primary diagnostic modality for MI, but manual interpretation is susceptible to human error. In this work, we propose Visionary V2, a multi-step, adaptive filtration method for ECG signal normalization, and use it to study machine learning (ML) and deep learning (DL) approaches to MI detection on the PTB Diagnostic ECG Database using all 15 available leads. On statistical features extracted from the filtered signals, such as the R-R interval, a Bagging ensemble of decision trees reaches 96.6% accuracy, compared with 87.7% when the signals are processed with BioSPPy. We further generate an image dataset from the filtered signals, on which a custom ResNet-50 misclassifies only 1 of 7,000 validation images and a custom CNN reaches an F1 score of about 98.7%. Finally, we apply LIME, Grad-CAM and Integrated Gradients to verify that the image models attend to the ECG waveform rather than the background. These results indicate that careful signal normalization combined with ML and DL models can support fast and accurate automated MI screening."
+  }
+]

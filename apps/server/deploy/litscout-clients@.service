@@ -1,0 +1,24 @@
+[Unit]
+Description=LitScout agent CLIs (%i)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=litscout
+Group=litscout
+WorkingDirectory=/home/litscout
+Environment=HOME=/home/litscout
+Environment=PATH=/home/litscout/.local/node/bin:/home/litscout/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/litscout/litscout/current/scripts/clients.sh %i
+TimeoutStartSec=30min
+MemoryMax=1G
+CPUQuota=100%
+Nice=10
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ReadWritePaths=/home/litscout
+CapabilityBoundingSet=
+UMask=0077
