@@ -94,18 +94,35 @@ jobs:
       - run: pnpm test:merge
       - run: node tools/audit.mjs --tests
 
+  # Desktop and phone flows run on separate machines, each with its own local
+  # server: the flows share one fixture database within a run, so each
+  # project stays serial on its machine (playwright.config.ts).
   browser:
-    name: Build, browser tests and rehearsal
+    name: Browser tests (${{ matrix.project }})
     needs: scope
     if: needs.scope.outputs.code == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop, phone]
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
       - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e --project=${{ matrix.project }}
+
+  build:
+    name: Build, smoke tests and rehearsal
+    needs: scope
+    if: needs.scope.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - run: pnpm build
-      - run: pnpm test:e2e
       - run: pnpm smoke
       - name: Upload the rehearsal transcript
         if: failure()
@@ -120,7 +137,7 @@ jobs:
   verify:
     name: verify
     if: always()
-    needs: [scope, quick, static, unit, coverage, browser]
+    needs: [scope, quick, static, unit, coverage, browser, build]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

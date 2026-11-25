@@ -43,13 +43,15 @@ It runs, in order:
 
 The GitHub workflow splits these into parallel jobs: the quick checks with the
 dependency audit, types and lint, the unit tests in two shards (`pnpm
-test:shard 1/2`), and the build with the browser tests, smoke tests and
-rehearsal. A merge job (`pnpm test:merge`) checks the coverage gates on the
-shards' combined reports, as `pnpm test:coverage` does locally. A last job,
-`verify`, passes only when all of them pass. A change that touches only documentation runs the quick checks
+test:shard 1/2`), the desktop and phone browser flows on separate machines,
+and the build with the smoke tests and rehearsal. A merge job (`pnpm
+test:merge`) checks the coverage gates on the shards' combined reports, as
+`pnpm test:coverage` does locally. A last job, `verify`, passes only when all
+of them pass. A change that touches only documentation runs the quick checks
 alone, unless a test reads one of the changed documents by its path
 ([`tools/ci-scope.mjs`](../tools/ci-scope.mjs)). Dispatching the workflow by
-hand from the Actions tab runs everything. [Workflow](../.github/workflows/ci.yml)
+hand from the Actions tab runs everything.
+[Workflow](../.github/workflows/ci.yml)
 
 Tests block external network calls. D1 tests use a local workerd.
 
