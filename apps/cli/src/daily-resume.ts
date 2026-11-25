@@ -17,6 +17,7 @@ import {
 } from "@litscout/pipeline/contracts/index";
 import { listingCursorSchema } from "@litscout/pipeline/contracts/limits";
 import { sourceCrawl } from "./source-crawl";
+import { ATTEMPTS_FILE } from "./abstract-attempts";
 import { commitState } from "./venue-crawl";
 import { nowFor, type FlowDeps } from "./flow-runtime";
 import {
@@ -94,12 +95,19 @@ export async function dailyFetchResuming(
     throw new Error("Resume checkpoint day mismatch");
   const original = crawler(deps, config);
   const crawl: Crawl = async (...args) => {
-    if (saved)
+    if (saved) {
+      const entries = Object.entries(saved.venueState ?? {});
+      const isLedger = ([name]: [string, string]) => name === ATTEMPTS_FILE;
       return {
         ...saved.result,
         complete: () =>
-          commitState(deps.dir, Object.entries(saved.venueState ?? {})),
+          commitState(
+            deps.dir,
+            entries.filter((entry) => !isLedger(entry)),
+          ),
+        settled: () => commitState(deps.dir, entries.filter(isLedger)),
       };
+    }
     const result = await original(...args);
     const venueState = "venueState" in result ? result.venueState : undefined;
     await writeCheckpoint(

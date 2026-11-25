@@ -148,7 +148,11 @@ export type CrawlResult = {
   deferred?: number;
   signals?: Record<string, number>;
   warnings?: string[];
+  /** Keeps the crawl's venue progress; skipped while venue papers are deferred. */
   complete?: () => Promise<void>;
+  /** Keeps state that does not depend on the venue papers (the abstract
+   * lookups' ledger) once the uploads are done, deferral or not. */
+  settled?: () => Promise<void>;
   listing?: ListingCursor;
   message?: string;
 };
@@ -518,6 +522,7 @@ export async function dailyFetch(
     new Set(days.map((d) => d.day)),
   );
   await storeListing(api, result.listing);
+  await result.settled?.();
   if (!deferred) await result.complete?.();
   return fetchReport(day, days, result, {
     ...uploaded,

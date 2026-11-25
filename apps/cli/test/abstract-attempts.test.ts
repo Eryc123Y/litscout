@@ -158,7 +158,10 @@ describe("the daily run's abstract retry", () => {
     // A resumable run keeps the state under the names its snapshot accepts.
     expect(Object.keys(first.venueState ?? {})).toEqual([ATTEMPTS_FILE]);
     expect(ATTEMPTS_FILE).toMatch(STATE_FILE);
+    // Venue progress waits for deferred papers; the ledger does not.
     await first.complete?.();
+    expect(() => readFileSync(path.join(dir, ATTEMPTS_FILE))).toThrow();
+    await first.settled?.();
     expect(
       JSON.parse(readFileSync(path.join(dir, ATTEMPTS_FILE), "utf8")),
     ).toEqual({
@@ -176,7 +179,7 @@ describe("the daily run's abstract retry", () => {
       history(["10.1/b"]),
     );
     expect(lookup.asked.at(-1)).toEqual(["doi:10.1/a"]);
-    await later.complete?.();
+    await later.settled?.();
     expect(
       JSON.parse(readFileSync(path.join(dir, ATTEMPTS_FILE), "utf8"))[
         "doi:10.1/a"

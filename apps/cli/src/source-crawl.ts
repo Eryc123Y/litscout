@@ -73,13 +73,14 @@ async function requestMissing(missing: Missing[], deps: CrawlDeps) {
 }
 /**
  * Venue papers in the history still without an abstract, newest first, that are
- * due for another lookup; the ledger of misses goes into `state`, which is
- * written once the run's ingest has completed.
+ * due for another lookup. The ledger of misses goes into `ledgerState`,
+ * written once the run's uploads are done (`settled`), even while venue papers
+ * are deferred and the venue progress waits.
  */
 async function missingAbstracts(
   history: HistoryDay[],
   deps: CrawlDeps,
-  state: Map<string, string>,
+  ledgerState: Map<string, string>,
 ) {
   const lacking = [...history]
     .sort((a, b) => b.day.localeCompare(a.day))
@@ -107,7 +108,7 @@ async function missingAbstracts(
     now,
   );
   if (JSON.stringify(ledger) !== JSON.stringify(attempts))
-    state.set(ATTEMPTS_FILE, JSON.stringify(ledger));
+    ledgerState.set(ATTEMPTS_FILE, JSON.stringify(ledger));
   return missing.flatMap((m, i) =>
     replies[i]!.abstract
       ? [{ day: m.day, paper: { ...m.paper, abstract: replies[i]!.abstract! } }]
@@ -159,6 +160,7 @@ async function enrich(
   history: HistoryDay[],
   days: Record<string, PaperInput[]>,
   state: Map<string, string>,
+  ledgerState: Map<string, string>,
 ) {
   if (deps.signal?.aborted) {
     days[day] ??= [];
@@ -185,7 +187,7 @@ async function enrich(
   try {
     for (const filled of deps.signal?.aborted
       ? []
-      : await missingAbstracts(history, deps, state))
+      : await missingAbstracts(history, deps, ledgerState))
       (days[filled.day] ??= []).push(filled.paper);
   } catch (error) {
     deps.report?.(
@@ -223,6 +225,7 @@ export function sourceCrawl(config: LitScoutConfig, given: CrawlDeps) {
           invalid: InvalidRecord[] = [];
         const active = loggedDeps(timed, log.report, invalid);
         const state = new Map<string, string>();
+        const ledgerState = new Map<string, string>();
         const arxivHistory = history
           .filter((d) => d.items.some((p) => p.source === "arxiv"))
           .map((d) => d.day);
@@ -243,6 +246,7 @@ export function sourceCrawl(config: LitScoutConfig, given: CrawlDeps) {
           history,
           found.days,
           state,
+          ledgerState,
         );
         if (timed.signal?.aborted)
           log.report(
@@ -273,8 +277,9 @@ export function sourceCrawl(config: LitScoutConfig, given: CrawlDeps) {
           warnings: log.warnings,
           diagnostics: log.diagnostics,
           invalid,
-          venueState: Object.fromEntries(state),
+          venueState: Object.fromEntries([...state, ...ledgerState]),
           complete: () => commitState(deps.dir, state),
+          settled: () => commitState(deps.dir, ledgerState),
         };
       },
     );

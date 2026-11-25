@@ -3,7 +3,8 @@ import { dailyFetch } from "../src/daily";
 import { paperSchema, schemas } from "../src/contracts/index";
 it("L3 explains that deferred counts unique venue papers beyond 150, retains progress and excludes arXiv", async () => {
   const day = "2026-11-17",
-    complete = vi.fn(async () => {});
+    complete = vi.fn(async () => {}),
+    settled = vi.fn(async () => {});
   const papers = Array.from({ length: 218 }, (_, i) =>
     paperSchema.parse({
       key: `doi:10.1234/${i}`,
@@ -45,6 +46,7 @@ it("L3 explains that deferred counts unique venue papers beyond 150, retains pro
           { day, id: "invalid", field: "links.0.url", reason: "Invalid URL" },
         ],
         complete,
+        settled,
       }),
       [],
     ),
@@ -57,4 +59,7 @@ it("L3 explains that deferred counts unique venue papers beyond 150, retains pro
     false,
   );
   expect(complete).not.toHaveBeenCalled();
+  // State that does not depend on the venue papers (the abstract lookups'
+  // ledger) is kept once the uploads are done, deferral or not.
+  expect(settled).toHaveBeenCalledOnce();
 });
