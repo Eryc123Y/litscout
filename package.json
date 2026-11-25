@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "test": "vitest run --reporter=default --reporter=json --outputFile.json=.artifacts/test-results.json",
     "test:coverage": "vitest run --coverage --reporter=default --reporter=json --outputFile.json=.artifacts/test-results.json && node tools/coverage-report.mjs",
-    "test:shard": "VITEST_SHARD=1 vitest run --coverage --reporter=blob --shard",
+    "test:shard": "VITEST_SHARD=1 vitest run --coverage --reporter=default --reporter=blob --shard",
     "test:merge": "vitest run --merge-reports=.vitest/blob --coverage --reporter=default --reporter=json --outputFile.json=.artifacts/test-results.json && node tools/coverage-report.mjs",
     "build": "node tools/build.mjs",
     "format": "prettier --write .",
