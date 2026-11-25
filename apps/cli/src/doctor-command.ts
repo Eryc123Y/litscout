@@ -5,7 +5,10 @@ import { constants } from "node:fs";
 import { z } from "zod";
 import type { LitScoutConfig } from "@litscout/core";
 import { apiOrigin, httpsBrowserOrigin } from "@litscout/core/config";
-import { SCHEMA_VERSION, scopesSchema } from "@litscout/db";
+// Subpaths, not the package index: the index loads the ORM, which slows every
+// command's start (apps/cli/scripts/cli-smoke.mjs).
+import { scopesSchema } from "@litscout/db/contracts";
+import { SCHEMA_VERSION } from "@litscout/db/schema-version";
 import { openVault } from "@litscout/sync/vault-source";
 import { inspectTokens } from "./token-warnings";
 import { profileWarnings } from "./config-warnings";

@@ -9,7 +9,7 @@ import {
 import { hfUpvotes, readHuggingFace } from "../src/huggingface";
 const directory = new URL("./fixtures/listings/", import.meta.url);
 for (const file of readdirSync(directory).filter((f) => f.endsWith(".html"))) {
-  it(`matches the Python spider on ${file}, every field in order`, () => {
+  it(`matches the Python spider on ${file}, every field in order`, async () => {
     const html = readFileSync(new URL(file, directory), "utf8");
     const expected = JSON.parse(
       readFileSync(
@@ -18,8 +18,13 @@ for (const file of readdirSync(directory).filter((f) => f.endsWith(".html"))) {
       ),
     );
     expect(
-      parseListing(html, "cs.CV", file.includes("recent") ? "recent" : "new")
-        .papers,
+      (
+        await parseListing(
+          html,
+          "cs.CV",
+          file.includes("recent") ? "recent" : "new",
+        )
+      ).papers,
     ).toEqual(expected);
   });
 }
@@ -68,7 +73,7 @@ it("backfills only asked days, omits missing abstracts and preserves covered day
   });
 });
 it("fails on an invalid listing and exhausted API retries", async () => {
-  expect(() => parseListing("broken", "cs.CV", "new")).toThrow();
+  await expect(parseListing("broken", "cs.CV", "new")).rejects.toThrow();
   await expect(
     fetchAbstracts(["a"], {
       fetch: vi.fn(async () => new Response("bad")) as typeof fetch,
@@ -118,14 +123,14 @@ const newRow = (item: number, id: string, title = "A paper", extra = "") =>
   `<dt><a name="item${item}"></a><a title="Abstract" href="/abs/${id}">Abstract</a></dt>
    <dd><div class="list-title">Title: ${title}</div>${extra}</dd>`;
 
-it("accepts a page with complete core sections and truncated replacements", () => {
+it("accepts a page with complete core sections and truncated replacements", async () => {
   const html = `<div id="dlpage"><h3>Showing new listings for Monday, 16 November 2026</h3>
     <div>Total of 2,100 entries</div>
     <h3>New submissions (showing 1 of 1 entries)</h3><dl>${newRow(1, "2611.00001")}</dl>
     <h3>Cross submissions (showing 1 of 1 entries)</h3><dl>${newRow(2, "2611.00002")}</dl>
     <h3>Replacement submissions (showing 1 of 2,098 entries)</h3><dl>${newRow(3, "2611.00003")}</dl>
     </div>`;
-  const result = parseListing(html, "cs.CV", "new");
+  const result = await parseListing(html, "cs.CV", "new");
   expect(result.complete).toBe(true);
   expect(result.papers.map((paper) => paper.id)).toEqual([
     "2611.00001",
@@ -133,16 +138,15 @@ it("accepts a page with complete core sections and truncated replacements", () =
   ]);
 });
 
-it("keeps first submissions and timely cross-lists, excluding replacements and withdrawal notices", () => {
+it("keeps first submissions and timely cross-lists, excluding replacements and withdrawal notices", async () => {
   const html = `<div id="dlpage"><h3>Showing new listings for Monday, 16 November 2026</h3>
     <ul><li><a href="#item3">Cross submissions</a></li><li><a href="#item5">Replacement submissions</a></li></ul>
     <dl>${newRow(1, "2611.00001v1")}${newRow(2, "2611.00002", "[Withdrawn] Paper")}
     ${newRow(3, "2611.00003")}${newRow(4, "2611.00004v2")}
     ${newRow(5, "2611.00005")}${newRow(6, "2611.00006v3")}</dl></div>`;
-  expect(parseListing(html, "cs.CV", "new").papers.map((p) => p.id)).toEqual([
-    "2611.00001",
-    "2611.00003",
-  ]);
+  expect(
+    (await parseListing(html, "cs.CV", "new")).papers.map((p) => p.id),
+  ).toEqual(["2611.00001", "2611.00003"]);
 });
 
 it("does not use an explicit withdrawn abstract to recover a paper", async () => {

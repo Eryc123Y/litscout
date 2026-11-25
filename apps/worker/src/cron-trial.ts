@@ -26,7 +26,7 @@ export async function stageCronListing(env: AppEnv, at: number) {
   const html = await boundedText(response, 64 * 1024);
   if (!html) throw new Error("Cron trial listing is empty or exceeds 64 KiB");
   const runDay = new Date(at).toISOString().slice(0, 10);
-  const page = parseListing(html, category, "new", runDay);
+  const page = await parseListing(html, category, "new", runDay);
   const listingTime = Date.parse(`${page.day} UTC`);
   const core = page.core;
   if (

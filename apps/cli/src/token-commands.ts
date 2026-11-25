@@ -2,7 +2,7 @@ import { randomBytes, createHash } from "node:crypto";
 import path from "node:path";
 import { ulid } from "ulid";
 import { z } from "zod";
-import { tokenInput, scopesSchema } from "@litscout/db";
+import { tokenInput, scopesSchema } from "@litscout/db/contracts";
 import { addCredential, removeCredential } from "./credentials-store";
 import { readState } from "./state";
 import { wranglerLine } from "./runtime";

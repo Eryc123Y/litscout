@@ -221,7 +221,7 @@ try {
       wallMs: noop.wallMs,
     });
     for (const [name, category, kind, html] of cases) {
-      const expected = parseListing(html, category, kind);
+      const expected = await parseListing(html, category, kind);
       if (
         !expected.papers.length ||
         expected.complete === name.includes("capped")
@@ -248,7 +248,7 @@ try {
         wallMs: result.wallMs,
       });
     }
-    const source = parseListing(recordedNew, "cs.CV", "new").papers;
+    const source = (await parseListing(recordedNew, "cs.CV", "new")).papers;
     const paperAt = (index: number, id: string) => ({
       ...source[index % source.length]!,
       id,

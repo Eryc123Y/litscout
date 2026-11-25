@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
 import type { FeedItem } from "@litscout/pipeline/contracts/index";
 import type { FeedApi } from "@litscout/pipeline/api";
 import { fetchPublicPdf, limitedPdf } from "./public-fetch";
@@ -48,6 +47,8 @@ export async function fetchRadarText(
 }
 
 async function pdfText(data: Uint8Array) {
+  // Loaded here, not at start: the PDF library is large and only this reads PDFs.
+  const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
   const loading = getDocument({ data, useSystemFonts: true });
   const pdf = await loading.promise;
   let text = "";

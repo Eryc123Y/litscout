@@ -1,4 +1,4 @@
-import { load, type CheerioAPI } from "cheerio";
+import type { CheerioAPI } from "cheerio";
 import { XMLParser, XMLValidator } from "fast-xml-parser";
 import { z } from "zod";
 import { retryAfterMs } from "./http/fetch-retry";
@@ -278,7 +278,7 @@ function mergeCorePages(pages: CorePage[], today: string) {
 }
 
 export function mergeNewListings(
-  pages: ReturnType<typeof parseListing>[],
+  pages: Awaited<ReturnType<typeof parseListing>>[],
   today: string,
 ) {
   const first = pages[0]!;
@@ -294,12 +294,15 @@ export function mergeNewListings(
   return { ...first, complete: false };
 }
 
-export function parseListing(
+export async function parseListing(
   html: string,
   category: string,
   kind: "new" | "recent",
   today = new Date().toISOString().slice(0, 10),
 ) {
+  // Loaded here, not at start: the CLI bundle would otherwise load the HTML
+  // parser for every command (apps/cli/scripts/cli-smoke.mjs).
+  const { load } = await import("cheerio");
   const $ = load(html);
   if (!$("#dlpage").length) throw new Error("arXiv listing unavailable");
   const rows = $("#dlpage dl dt");

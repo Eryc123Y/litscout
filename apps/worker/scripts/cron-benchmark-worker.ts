@@ -15,7 +15,10 @@ export { PairingStore, SourceLimiter } from "../src/index";
 
 const limits = ingestLimitsSchema.parse({});
 
-function plan(papers: ReturnType<typeof parseListing>["papers"], day: string) {
+function plan(
+  papers: Awaited<ReturnType<typeof parseListing>>["papers"],
+  day: string,
+) {
   const seen = new Set<string>();
   const unique = papers.filter(({ id }) => {
     if (seen.has(id)) return false;
@@ -48,7 +51,7 @@ export default {
       return Response.json({});
     }
     if (url.pathname === "/parse") {
-      const result = parseListing(
+      const result = await parseListing(
         await request.text(),
         url.searchParams.get("category")!,
         url.searchParams.get("kind") === "recent" ? "recent" : "new",
