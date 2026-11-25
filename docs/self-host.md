@@ -41,6 +41,13 @@ CONFIG="$SETUP/litscout.config.ts"
 cd "$REPO"
 ```
 
+`init` asks a few questions: choose 2, Cloudflare, then give your time zone,
+language, arXiv categories, topics and keywords, whether a signed-in agent
+CLI should write summaries, and the journals and conferences to watch. It
+writes `litscout.config.ts` and `venues.json` from the answers.
+`litscout init --defaults` writes a starter to edit by hand instead; step 7
+lists the fields either way.
+
 Vault sync is optional. Create or select a vault when you set up Obsidian
 sync. Reuse the same `CONFIG` path throughout setup and scheduling.
 `init` refuses to overwrite existing starter files.

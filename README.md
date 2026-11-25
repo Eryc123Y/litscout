@@ -124,9 +124,12 @@ The two ways to run LitScout differ in where these parts run.
 
 To see LitScout with your own topics before you set anything up, run all of
 it on your own computer: [Try LitScout on your own computer](docs/try-locally.md).
-A trial needs Node and pnpm. It has no sign-in and is
-reachable from that computer only, so it suits a look around, not daily use
-on several devices.
+A trial needs Node and pnpm. `litscout init` asks for your time zone, arXiv
+categories, topics and keywords, and whether a signed-in Claude Code or Codex
+should write summaries, then writes the config; until the first fetch, the
+reader shows a welcome page with the next commands. A trial has no sign-in
+and is reachable from that computer only, so it suits a look around, not
+daily use on several devices.
 
 ## Choose how to run it
 
@@ -172,22 +175,25 @@ guide has the exact commands.
 1. **Build.** In the repository, run `pnpm install --frozen-lockfile` and
    `pnpm build`.
 2. **Write a config.** Run `litscout init` in a private folder outside the
-   repository. It writes `litscout.config.ts`, `venues.json` and scheduler
-   examples. Set your time zone, the arXiv categories you follow and your
-   topics. The starter config is in keyword-only mode:
+   repository and answer its questions: how you will run LitScout, your time
+   zone and language, the arXiv categories you follow, your topics and their
+   keywords, whether a signed-in agent CLI should write summaries, and which
+   journals and conferences to watch. It writes `litscout.config.ts` and
+   `venues.json` from the answers, with scheduler examples beside them. The
+   config reads like this:
 
    ```ts
-   instance: { timezone: "UTC", language: "en", publicFeed: false },
-   sources: { arxiv: { categories: ["cs.CV", "cs.CL"] } },
+   instance: { timezone: "Europe/Berlin", language: "en", publicFeed: false },
+   sources: { arxiv: { categories: ["cs.CV", "cs.LG"] } },
    topics: [
-     { name: "Computer vision", keywords: ["depth estimation", "3D reconstruction"] },
+     { name: "Depth estimation", keywords: ["monocular depth", "stereo matching"] },
    ],
    agent: { mode: "none" }, // "client" turns on summaries and the brief
    ```
 
-   List the journals and conferences to watch in `venues.json`. It starts
-   empty. The [watchlist format](docs/self-host.md#venue-watchlist) says
-   which identifiers each kind of venue takes.
+   `litscout init --defaults` writes a starter to edit by hand instead. The
+   [watchlist format](docs/self-host.md#venue-watchlist) says which
+   identifiers each kind of venue takes.
 
 3. **Deploy.** On Cloudflare, `litscout deploy` creates the database and the
    Worker; then you put Cloudflare Access in front of the reader. On a server,

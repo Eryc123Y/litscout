@@ -6,10 +6,10 @@
 #
 # Needs Docker and the network (Ubuntu packages, Node from nodejs.org, npm
 # packages, arXiv). Rerun it after a change to the guide or to init,
-# server init --local, migrate, serve or daily fetch. Steps 1-5 as written,
-# then doctor, the checks behind "How a trial stays private" and the export
-# from step 9. The browser and the agent clients (steps 7 and 8) are not
-# covered.
+# server init --local, serve or daily fetch. Steps 1-4 as written, with
+# typed answers to init's questions, then doctor, the checks behind "How a
+# trial stays private" and the export from step 8. The browser and the
+# agent clients (steps 6 and 7) are not covered.
 set -euo pipefail
 NAME=ls-trial-test
 REPO=$(git rev-parse --show-toplevel)
@@ -40,24 +40,24 @@ pnpm install --frozen-lockfile >/dev/null 2>&1
 pnpm build >/dev/null 2>&1
 ls apps/cli/dist | tr "\n" " "; echo; litscout --help | head -c 60; echo'
 
-echo "== 2. config"
+echo "== 2. answer the questions (typed into a terminal by script(1))"
+# A trial, the suggested time zone and language, cs.CV and cs.LG, one topic,
+# and the computer vision venues. No agent CLI is installed here, so init
+# asks nothing about summaries.
 user 'mkdir -p ~/litscout/etc && cd ~/litscout/etc
-litscout init --json | head -c 200; echo
-sed -i "s#// publicUrl: \"https://worker.example.workers.dev\",#publicUrl: \"http://127.0.0.1:8787\",#" litscout.config.ts
-grep -n publicUrl litscout.config.ts'
-
-echo "== 3. prepare the server"
-user 'cd ~/litscout/etc
-litscout server init --local --json | head -c 300; echo
-node "$REPO/apps/cli/dist/server.js" migrate --config ~/litscout/etc/server.json | tail -c 120; echo
+(sleep 2; for answer in 1 "" "" "3, cs.LG" "Depth estimation" "monocular depth, stereo matching" "" 2; do printf "%s\n" "$answer"; sleep 1; done; sleep 3) |
+  script -q -c "litscout init" /dev/null | tr -d "\r" | tail -n 14
+grep -n -E "publicUrl|timezone|categories|name: \"Depth|mode:" litscout.config.ts
+python3 -c "import json; print([v[\"name\"] for v in json.load(open(\"venues.json\"))[\"venues\"]])"
 stat -c "%a %n" ~/litscout/etc/secrets.env ~/litscout/etc/server.json ~/.config/litscout/state.json'
 
-echo "== 4. start the server"
+echo "== 3. start LitScout (a trial prepares its database)"
 user 'nohup node "$REPO/apps/cli/dist/server.js" serve --config ~/litscout/etc/server.json > ~/serve.log 2>&1 &
 for i in $(seq 1 40); do sleep 1; h=$(curl -s http://127.0.0.1:8787/health || true); [ "$h" = "{\"ok\":true}" ] && break; done
-echo health=$h; cat ~/serve.log'
+echo health=$h; cat ~/serve.log
+curl -s http://127.0.0.1:8787/api/v1/feed/days?view=page | head -c 120; echo'
 
-echo "== 5. first day"
+echo "== 4. first day"
 user 'cd ~/litscout/etc
 litscout token create --name scheduler --scopes read,ingest --save-only --json | head -c 200; echo
 litscout daily fetch --json | head -c 160; echo
@@ -73,7 +73,7 @@ curl -s -o /dev/null -w "another port: %{http_code}\n" -H "Host: 127.0.0.1:9999"
 curl -s -o /dev/null -w "agent endpoint without a token: %{http_code}\n" -X POST -H "Content-Type: application/json" -d "{}" http://127.0.0.1:8787/mcp
 curl -s -o /dev/null -w "write from another site: %{http_code}\n" -X POST -H "Content-Type: application/json" -H "Sec-Fetch-Site: cross-site" -H "Origin: https://elsewhere.example" -d "{}" http://127.0.0.1:8787/api/v1/events'
 
-echo "== 9. export"
+echo "== 8. export"
 user 'cd ~/litscout/etc
 litscout token create --name export --scopes read,write --save-only --json | head -c 120; echo
 litscout backup --out ~/litscout-export.json --json | head -c 200; echo

@@ -88,11 +88,16 @@ mkdir -p ~/litscout/etc && cd ~/litscout/etc
 litscout init
 ```
 
-`init` writes `litscout.config.ts`, `venues.json` and templates. In
-`litscout.config.ts` set at least:
+`init` asks a few questions: choose 3, your own Linux server, and give the
+server's public HTTPS address (the one CLI and MCP clients will use, for
+example `https://litscout-api.example.org`), then your time zone, language,
+arXiv categories, topics and keywords, and the journals and conferences to
+watch. It writes `litscout.config.ts`, `venues.json` and templates from the
+answers. Summaries need an agent CLI signed in as `litscout`: keep keyword
+mode for now and see step 11. `litscout init --defaults` writes a starter to
+edit by hand instead; in it, set at least:
 
-- `instance.publicUrl`: the public HTTPS address CLI and MCP clients will use,
-  for example `"https://litscout-api.example.org"`;
+- `instance.publicUrl`: the public HTTPS address;
 - `instance.timezone` and `instance.language`;
 - `sources.arxiv.categories` and `topics`;
 - `agent`: keep `mode: "none"` for keyword-only feeds, or see step 11.
