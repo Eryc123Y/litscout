@@ -48,7 +48,7 @@ esac
 }
 function run(
   mode: string,
-  { homeGigabytes = 0, timezone = "", sundayIn = "" } = {},
+  { homeGigabytes = 0, timezone = "", sundayIn = "", quote = '"' } = {},
 ) {
   const s = server();
   if (sundayIn) {
@@ -65,7 +65,7 @@ function run(
     mkdirSync(path.join(s.base, "etc"), { recursive: true });
     writeFileSync(
       path.join(s.base, "etc", "litscout.config.ts"),
-      `export default {\n  instance: {\n    timezone: "${timezone}",\n  },\n};\n`,
+      `export default {\n  instance: {\n    timezone: ${quote}${timezone}${quote},\n  },\n};\n`,
     );
   }
   if (homeGigabytes) {
@@ -136,12 +136,14 @@ it("captures and mirrors the alphaXiv library once a day, in the final run", () 
 
 it("decides Sunday's weekly summary in the instance's own time zone", () => {
   // A stand-in date(1): Sunday in one zone, Wednesday everywhere else.
-  for (const [timezone, sunday] of [
-    ["Pacific/Kiritimati", true],
-    ["Pacific/Pago_Pago", false],
+  for (const [timezone, sunday, quote] of [
+    ["Pacific/Kiritimati", true, '"'],
+    ["Pacific/Kiritimati", true, "'"],
+    ["Pacific/Pago_Pago", false, '"'],
   ] as const) {
     const names = run("final", {
       timezone,
+      quote,
       sundayIn: "Pacific/Kiritimati",
     }).map((step) => step.step);
     expect(names.includes("weekly"), timezone).toBe(sunday);

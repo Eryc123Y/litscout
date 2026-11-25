@@ -280,9 +280,13 @@ export function EmptyDay({
   keywordOnly?: boolean;
 }) {
   const days = useDays(isPublic);
+  // Signed in, the days decide between a welcome and the usual empty day:
+  // show neither until they are known.
+  if (!isPublic && days.isPending) return null;
   if (
     !isPublic &&
     days.isSuccess &&
+    !days.data.nextBefore &&
     !days.data.items.some((item) => item.counts.total > 0)
   )
     return <FirstRun topics={topics} keywordOnly={keywordOnly} />;

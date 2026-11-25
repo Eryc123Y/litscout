@@ -54,12 +54,15 @@ async function open(listen: boolean) {
   return { config, mf, url, close };
 }
 
-async function serve() {
-  const { config, mf, url, close } = await open(true);
-  // A trial on this computer prepares its own database: one step less for
-  // someone trying LitScout. A server keeps migrate as a separate step, run
-  // with the service stopped and a snapshot taken.
-  if (config.local) {
+/** A trial on this computer prepares its own database before it listens:
+ * one step less for someone trying LitScout, and no request meets a
+ * database that is not ready. A server keeps migrate as a separate step, run
+ * with the service stopped and a snapshot taken. */
+async function prepareTrial() {
+  const { config } = loadServerConfig(required("config"));
+  if (!config.local) return;
+  const { mf, close } = await open(false);
+  try {
     const db = (await mf.getD1Database("DB")) as unknown as D1Database;
     const { applied } = await applyMigrations(
       db,
@@ -68,7 +71,14 @@ async function serve() {
     );
     if (applied.length)
       console.log(`Database prepared (${applied.length} migrations applied)`);
+  } finally {
+    await close();
   }
+}
+
+async function serve() {
+  await prepareTrial();
+  const { config, mf, url, close } = await open(true);
   console.log(`LitScout server on ${url.href} (data in ${config.state})`);
   const [hours, minutes] = config.cronUtc.split(":");
   const cron = `${Number(minutes)} ${Number(hours)} * * *`;

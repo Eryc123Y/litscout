@@ -156,7 +156,8 @@ it("asks again until an answer is usable", async () => {
 it("writes a config for Cloudflare or a server without starting a trial", async () => {
   const h = await harness([
     "3",
-    "https://litscout.example.org",
+    "https://litscout.example.org/?from=mail", // not an origin
+    "https://litscout.example.org/",
     "",
     "",
     "cs.CL",
@@ -164,7 +165,7 @@ it("writes a config for Cloudflare or a server without starting a trial", async 
     "dependency parsing",
     "",
     "n", // no agent, though Claude Code is signed in
-    "",
+    "2, 2", // an area named twice
   ]);
   expect(await runCommand(["init"], h.deps)).toBe(0);
   const { config } = await loadConfig(h.cwd);
@@ -172,6 +173,11 @@ it("writes a config for Cloudflare or a server without starting a trial", async 
   expect(config.agent.mode).toBe("none");
   expect(await exists(path.join(h.root, "litscout"))).toBe(false);
   expect(h.out.join("\n")).toContain("docs/self-host-server.md");
+  const names = JSON.parse(
+    await readFile(path.join(h.cwd, "venues.json"), "utf8"),
+  ).venues.map((v: { name: string }) => v.name);
+  expect(names).toEqual([...new Set(names)]);
+  expect(names).toContain("CVPR");
 });
 
 it("never asks when it would overwrite, in a script, or with --defaults", async () => {
@@ -196,4 +202,30 @@ it("never asks when it would overwrite, in a script, or with --defaults", async 
       await readFile(path.join(plain.cwd, "litscout.config.ts"), "utf8"),
     ).toContain('timezone: "UTC"');
   }
+});
+
+it("says how to finish when the trial's server settings already exist", async () => {
+  const h = await harness([
+    "",
+    "",
+    "",
+    "cs.LG",
+    "Optimisation",
+    "convex",
+    "",
+    "",
+    "",
+  ]);
+  const { mkdir } = await import("node:fs/promises");
+  await mkdir(path.join(h.root, "litscout", "etc"), { recursive: true });
+  await writeFile(path.join(h.root, "litscout", "etc", "server.json"), "{}");
+  expect(await runCommand(["init"], h.deps)).toBe(0);
+  const text = h.out.join("\n");
+  expect(text).toMatch(/server settings were not written: .*exists/);
+  expect(text).toContain("litscout server init --local --force");
+  // The config is written either way; the old server settings are kept.
+  expect((await loadConfig(h.cwd)).config.topics[0]!.name).toBe("Optimisation");
+  expect(
+    await readFile(path.join(h.root, "litscout", "etc", "server.json"), "utf8"),
+  ).toBe("{}");
 });

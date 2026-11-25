@@ -263,7 +263,7 @@ async function venues(deps: WizardDeps) {
         /^\d+$/.test(item) ? catalog.areas[Number(item) - 1] : undefined,
       );
       return picked.every(Boolean)
-        ? picked.flatMap((area) => area!.venues)
+        ? [...new Set(picked)].flatMap((area) => area!.venues)
         : undefined;
     },
     `Type numbers from 1 to ${catalog.areas.length}, or press Enter.`,
@@ -282,12 +282,18 @@ export async function askSetup(deps: WizardDeps): Promise<Answers> {
         ? await ask(
             deps,
             "The server's public https address (Enter to set it later)",
-            (answer) =>
-              !answer
-                ? ""
-                : /^https:\/\/[^/\s]+\/?$/.test(answer)
-                  ? answer.replace(/\/$/, "")
-                  : undefined,
+            (answer) => {
+              if (!answer) return "";
+              // An origin only: no path, query, fragment or credentials.
+              const url = URL.canParse(answer) ? new URL(answer) : undefined;
+              return url?.protocol === "https:" &&
+                !url.username &&
+                !url.password &&
+                url.href === `${url.origin}/` &&
+                answer.replace(/\/$/, "") === url.origin
+                ? url.origin
+                : undefined;
+            },
             "Type an address such as https://litscout.example.org, or press Enter.",
           )
         : "";

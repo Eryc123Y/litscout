@@ -132,10 +132,11 @@ export async function initCommand(
         settings(answers),
       );
     } catch (error) {
-      if (!(error instanceof UsageError)) throw error;
+      // The config is written: say what stopped the server's settings and
+      // how to finish, rather than failing the whole setup.
       messages.push(
-        `The trial's settings were not written: ${error.message}`,
-        "Fix that, then run `litscout server init --local` in this folder.",
+        `The trial's server settings were not written: ${error instanceof Error ? error.message : String(error)}`,
+        "Fix that, then run `litscout server init --local --force` in this folder before step 1 below.",
       );
     }
   }

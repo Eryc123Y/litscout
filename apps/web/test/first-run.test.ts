@@ -52,7 +52,10 @@ afterEach(() => {
 });
 
 /** An instance whose earlier days are `days`: none, for a new one. */
-function serve(days: { day: string; status: string; total: number }[]) {
+function serve(
+  days: { day: string; status: string; total: number }[],
+  nextBefore: string | null = null,
+) {
   vi.stubGlobal("matchMedia", () => ({
     matches: false,
     addEventListener: vi.fn(),
@@ -70,7 +73,7 @@ function serve(days: { day: string; status: string; total: number }[]) {
             status: d.status,
             counts: counts(d.total),
           })),
-          nextBefore: null,
+          nextBefore,
         });
       if (path.endsWith("/digest")) return json(null);
       if (path.endsWith("/triage")) return json({ day, items: [], toRead: 0 });
@@ -160,6 +163,15 @@ it("says when copying failed, without hiding the commands", async () => {
 
 it("is gone once any day has papers, and never on the public feed", async () => {
   serve([{ day: "2026-11-24", status: "final", total: 12 }]);
+  mount();
+  expect(await screen.findByText("No papers yet today.")).toBeTruthy();
+  expect(
+    screen.queryByRole("region", { name: "Welcome to LitScout" }),
+  ).toBeNull();
+  cleanup();
+
+  // Older days on a later page: not a new LitScout.
+  serve([{ day: "2026-11-24", status: "empty", total: 0 }], "2026-11-20");
   mount();
   expect(await screen.findByText("No papers yet today.")).toBeTruthy();
   expect(
