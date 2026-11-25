@@ -1,11 +1,12 @@
 [Unit]
-Description=LitScout retry runs at 14:30 and 16:30 (Asia/Shanghai)
+Description=LitScout retry runs at 06:30 and 08:30 UTC
 
 [Timer]
-# arXiv's new listing appeared around 13:40 Asia/Shanghai on 2026-11-23, after
-# the 09:45 main run; the second retry covers a later release.
-OnCalendar=*-*-* 14:30:00 Asia/Shanghai
-OnCalendar=*-*-* 16:30:00 Asia/Shanghai
+# arXiv's new listing has appeared around 05:40 UTC, after the 01:45 main
+# run; the second retry covers a later release. Times are UTC: change them
+# (here and in the other timers) to suit your day.
+OnCalendar=*-*-* 06:30:00 UTC
+OnCalendar=*-*-* 08:30:00 UTC
 Persistent=true
 Unit=litscout-daily@retry.service
 

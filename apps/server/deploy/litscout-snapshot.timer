@@ -2,7 +2,7 @@
 Description=Daily LitScout state snapshot
 
 [Timer]
-OnCalendar=*-*-* 04:30:00 Asia/Shanghai
+OnCalendar=*-*-* 20:30:00 UTC
 Persistent=true
 RandomizedDelaySec=300
 

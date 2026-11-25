@@ -134,9 +134,8 @@ shows them in a Server tile, and `litscout doctor` checks them instead of
 Wrangler, D1 usage and reconciliation and the 500 MB D1 limit, which do not
 apply here. The Worker knows it runs on the server because `apps/server` sets
 `LITSCOUT_RUNTIME=server`. Install
-`litscout-daily@.service` and the three timers (09:45 main, 14:30 and 16:30
-retries, 21:45 final, Asia/Shanghai; arXiv's listing has appeared around
-13:40). The unit loads `etc/sources.env` (mode 600, owner `litscout`) when it
+`litscout-daily@.service` and the three timers (01:45 UTC main, 06:30 and
+08:30 retries, 13:45 final; arXiv's listing has appeared around 05:40 UTC). The unit loads `etc/sources.env` (mode 600, owner `litscout`) when it
 exists: `OPENALEX_API_KEY`, `OPENREVIEW_USERNAME` and `OPENREVIEW_PASSWORD`
 (or `OPENREVIEW_TOKEN`) and `S2_API_KEY`. Without them OpenAlex conference
 reads fail once the shared keyless budget runs out, and OpenReview venues are
@@ -277,7 +276,7 @@ go under `expiry`.
 
 ## Snapshots
 
-`litscout-snapshot.timer` runs `scripts/snapshot.py` at 04:30: each SQLite
+`litscout-snapshot.timer` runs `scripts/snapshot.py` at 20:30 UTC: each SQLite
 file is copied with SQLite's online backup while the server keeps running,
 then the state folder (without its cache) is packed into one `.tar.xz` in
 `backups/`; the newest seven are kept. About 6.5 MB for 39 MB of data.

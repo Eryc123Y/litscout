@@ -46,8 +46,28 @@ esac
   chmodSync(path.join(bin, "flock"), 0o755);
   return { home, base, bin, node };
 }
-function run(mode: string, { homeGigabytes = 0 } = {}) {
+function run(
+  mode: string,
+  { homeGigabytes = 0, timezone = "", sundayIn = "" } = {},
+) {
   const s = server();
+  if (sundayIn) {
+    const real = execFileSync("bash", ["-c", "command -v date"], {
+      encoding: "utf8",
+    }).trim();
+    writeFileSync(
+      path.join(s.bin, "date"),
+      `#!/usr/bin/env bash\nif [ "$1" = "+%u" ]; then [ "$TZ" = "${sundayIn}" ] && echo 7 || echo 3; exit 0; fi\nexec ${real} "$@"\n`,
+    );
+    chmodSync(path.join(s.bin, "date"), 0o755);
+  }
+  if (timezone !== "") {
+    mkdirSync(path.join(s.base, "etc"), { recursive: true });
+    writeFileSync(
+      path.join(s.base, "etc", "litscout.config.ts"),
+      `export default {\n  instance: {\n    timezone: "${timezone}",\n  },\n};\n`,
+    );
+  }
   if (homeGigabytes) {
     // A sparse file: its apparent size counts, nothing is written.
     const fd = openSync(path.join(s.base, "state.sqlite"), "w");
@@ -59,7 +79,7 @@ function run(mode: string, { homeGigabytes = 0 } = {}) {
       PATH: `${s.bin}:${process.env.PATH}`,
       HOME: s.home,
       LITSCOUT_NODE: s.node,
-      LITSCOUT_TZ: "UTC",
+      ...(timezone === "" ? { LITSCOUT_TZ: "UTC" } : {}),
     },
     encoding: "utf8",
   });
@@ -112,4 +132,42 @@ it("captures and mirrors the alphaXiv library once a day, in the final run", () 
   expect(final.indexOf("alphaxiv")).toBeGreaterThan(final.indexOf("links"));
   expect(final.indexOf("alphaxiv")).toBeLessThan(final.indexOf("prune"));
   expect(run("main").map((s) => s.step)).not.toContain("alphaxiv");
+});
+
+it("decides Sunday's weekly summary in the instance's own time zone", () => {
+  // A stand-in date(1): Sunday in one zone, Wednesday everywhere else.
+  for (const [timezone, sunday] of [
+    ["Pacific/Kiritimati", true],
+    ["Pacific/Pago_Pago", false],
+  ] as const) {
+    const names = run("final", {
+      timezone,
+      sundayIn: "Pacific/Kiritimati",
+    }).map((step) => step.step);
+    expect(names.includes("weekly"), timezone).toBe(sunday);
+  }
+});
+
+it("ships timers in UTC, at the instants the owner's server has used", () => {
+  const deploy = path.resolve("apps/server/deploy");
+  const calendar = (name: string) =>
+    readFileSync(path.join(deploy, name), "utf8")
+      .split("\n")
+      .filter((line) => line.startsWith("OnCalendar="))
+      .map((line) => line.slice("OnCalendar=".length));
+  expect(calendar("litscout-daily-main.timer")).toEqual(["*-*-* 01:45:00 UTC"]);
+  expect(calendar("litscout-daily-retry.timer")).toEqual([
+    "*-*-* 06:30:00 UTC",
+    "*-*-* 08:30:00 UTC",
+  ]);
+  expect(calendar("litscout-daily-final.timer")).toEqual([
+    "*-*-* 13:45:00 UTC",
+  ]);
+  expect(calendar("litscout-snapshot.timer")).toEqual(["*-*-* 20:30:00 UTC"]);
+  expect(calendar("litscout-clients-check.timer")).toEqual([
+    "*-*-* 12:30:00 UTC",
+  ]);
+  expect(calendar("litscout-clients-update.timer")).toEqual([
+    "Sun *-*-* 21:30:00 UTC",
+  ]);
 });

@@ -21,9 +21,12 @@ it("validates the neutral template and every documented default", () => {
   });
   expect(config.instance).toMatchObject({
     name: "LitScout",
+    // Neutral defaults: a new instance names no one's time zone or vault.
+    timezone: "UTC",
     language: "en",
     publicFeed: false,
   });
+  expect(config.vault.digestsDir).toBe("LitScout/Digests");
   expect(config.sources.huggingface).toEqual({
     dailyPapers: true,
     upvotesDays: 7,

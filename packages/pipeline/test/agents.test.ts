@@ -309,6 +309,17 @@ it.each([false, true])(
       `**${topic}** (matched 1 · [All](${route}?topic=2D-to-3D+and+stereo))\n`,
     );
     expect(body).not.toContain("No 2D→3D / stereo papers today");
+    // A topic with no matches reads the same whatever its name.
+    const quiet = renderDigest(
+      digestSchema.parse({ day }),
+      [],
+      [{ name: topic, keywords: [] }],
+      "https://reader.example/",
+      isPublic,
+    );
+    expect(quiet).toMatch(
+      new RegExp(`\\*\\*${topic}\\*\\* \\(matched 0 .*\\): No picks today`),
+    );
     expect(body).toMatch(/\*\*Language\*\* .*\): .+/);
     expect(body).not.toContain("#day=");
   },

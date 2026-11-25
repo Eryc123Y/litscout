@@ -221,9 +221,11 @@ check. Subscription CLIs only: LitScout never needs an API key for them.
 
 ## 12. Scheduled runs and snapshots (administrator)
 
-Edit the times in the timers to your time zone first (`OnCalendar=` in
-`litscout-daily-main.timer`, `-retry` and `-final`; they ship as 09:45, 14:30 and
-16:30, and 21:45 Asia/Shanghai). The fetch reads source keys from
+The timers ship in UTC: the main run at 01:45, retries at 06:30 and 08:30
+(arXiv's new listing has appeared around 05:40), the final run at 13:45 and
+the snapshot at 20:30. Change the `OnCalendar=` lines to suit your day; a
+time zone name works too, for example `*-*-* 09:45:00 Europe/Berlin`. The
+weekly summary follows `instance.timezone` in your config. The fetch reads source keys from
 `etc/sources.env` (mode 600, owner `litscout`; `KEY=VALUE` lines for
 `OPENALEX_API_KEY`, `OPENREVIEW_USERNAME` and `OPENREVIEW_PASSWORD` or
 `OPENREVIEW_TOKEN`, `S2_API_KEY`), which `litscout-daily@.service` loads when

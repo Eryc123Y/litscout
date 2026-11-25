@@ -158,14 +158,9 @@ function topicLines(
     lines: string[] = [];
   for (const [topic, picks] of picksByTopic) {
     const matched = papers.filter((p) => p.topics.includes(topic)).length;
-    const empty = /^2d/i.test(topic)
-      ? draft.lang === "zh"
-        ? "今日无 2D→3D / 立体视觉相关论文"
-        : "No 2D→3D / stereo papers today"
-      : s.empty;
     lines.push(
       "",
-      `**${topic}** (${s.matched} ${matched} · [${draft.lang === "zh" ? "全部" : "All"}](${href(undefined, topic)}))${matched || picks.length ? "" : `: ${empty}`}`,
+      `**${topic}** (${s.matched} ${matched} · [${draft.lang === "zh" ? "全部" : "All"}](${href(undefined, topic)}))${matched || picks.length ? "" : `: ${s.empty}`}`,
     );
     for (const p of picks) lines.push(paperLine(p, papers, draft, href, topic));
   }

@@ -97,7 +97,7 @@ export const configSchema = z.strictObject({
       name: z.string().min(1).default("LitScout"),
       publicUrl: publicEndpoint.optional(),
       webUrl: webOrigin.optional(),
-      timezone: timezone.default("Asia/Shanghai"),
+      timezone: timezone.default("UTC"),
       language: z.enum(["en", "zh"]).default("en"),
       publicFeed: z.boolean().default(false),
       limits: z
@@ -171,10 +171,7 @@ export const configSchema = z.strictObject({
           template: z.string().min(1).optional(),
         })
         .prefault({}),
-      digestsDir: z
-        .string()
-        .min(1)
-        .default("Claude/Scheduled/litscout-daily/digests-new"),
+      digestsDir: z.string().min(1).default("LitScout/Digests"),
       digestTemplate: z.string().min(1).optional(),
     })
     .superRefine((vault, ctx) => {

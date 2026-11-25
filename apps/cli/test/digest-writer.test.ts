@@ -168,6 +168,8 @@ it("uses the browser origin and today's upvotes, and gives the writer each confi
   );
   expect(prompt).toContain("at most 1 pick(s) per topic");
   expect(prompt).toContain("short project label based on the supplied briefs");
+  // The example label is a generic one, not a particular reader's project.
+  expect(prompt).toContain("(e.g. Thesis · depth estimation)");
   expect(prompt).toContain("relevance");
   expect(prompt).toContain("angles");
   expect(result).toMatchObject({

@@ -28,7 +28,10 @@ CONFIG=${LITSCOUT_CONFIG:-$BASE/etc/litscout.config.ts}
 NODE=${LITSCOUT_NODE:-node}
 CLI=$BASE/current/dist/index.js
 LOGS=$BASE/logs
-TZ_LOCAL=${LITSCOUT_TZ:-Asia/Shanghai}
+# The instance's time zone decides which run is Sunday's (the weekly summary):
+# LITSCOUT_TZ, else instance.timezone in the config, else UTC.
+TZ_LOCAL=${LITSCOUT_TZ:-$(sed -n 's/^[[:space:]]*timezone:[[:space:]]*"\([^"]*\)".*/\1/p' "$CONFIG" 2>/dev/null | head -n 1)}
+TZ_LOCAL=${TZ_LOCAL:-UTC}
 umask 077
 mkdir -p "$LOGS"
 LOG=$LOGS/run-$(date -u +%Y%m%dT%H%M%SZ)-$MODE.jsonl

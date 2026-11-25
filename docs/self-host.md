@@ -926,13 +926,13 @@ finds additional writes, it records the difference in `unaccounted`.
 Unaccounted writes or an exceeded estimate reduce the day's effective limit
 from 80,000 to 75,000 until 00:00 UTC. The Health page shows the same limit.
 
-| What you see                                 | Action                                                                                                                                   |
-| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| CLI `budget-stop` with `resumeAt`            | Keep checkpoints; rerun the same command after reset (00:00 UTC, 08:00 Malaysia/Shanghai). Use `budget` if abandoned leases may be stale |
-| HTTP 413                                     | Lower the batch or JSON byte limit; split large records where their contract permits it                                                  |
-| HTTP 429 with write-budget fields            | CLI shrinks to the largest affordable batch, down to one item, or returns `budget-stop`                                                  |
-| HTTP 429 with `Retry-After` on public routes | Wait for the per-IP minute bucket to recover                                                                                             |
-| Cloudflare error 1027                        | Account request allowance is exhausted; wait until 00:00 UTC. This is outside LitScout's write budget                                    |
+| What you see                                 | Action                                                                                                          |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| CLI `budget-stop` with `resumeAt`            | Keep checkpoints; rerun the same command after reset (00:00 UTC). Use `budget` if abandoned leases may be stale |
+| HTTP 413                                     | Lower the batch or JSON byte limit; split large records where their contract permits it                         |
+| HTTP 429 with write-budget fields            | CLI shrinks to the largest affordable batch, down to one item, or returns `budget-stop`                         |
+| HTTP 429 with `Retry-After` on public routes | Wait for the per-IP minute bucket to recover                                                                    |
+| Cloudflare error 1027                        | Account request allowance is exhausted; wait until 00:00 UTC. This is outside LitScout's write budget           |
 
 For local CPU estimates run `pnpm --filter @litscout/worker bench:ingest`.
 An operator checks actual

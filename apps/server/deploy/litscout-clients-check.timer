@@ -1,8 +1,8 @@
 [Unit]
-Description=Daily login check of LitScout's agent CLIs (before the 21:45 run)
+Description=Daily login check of LitScout's agent CLIs (before the 13:45 UTC run)
 
 [Timer]
-OnCalendar=*-*-* 20:30:00 Asia/Shanghai
+OnCalendar=*-*-* 12:30:00 UTC
 Persistent=true
 Unit=litscout-clients@check.service
 
