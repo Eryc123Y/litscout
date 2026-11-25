@@ -25,11 +25,11 @@ import {
   writeCheckpoint,
 } from "./checkpoint-store";
 import { recordStep } from "./summary-command";
+/** Names of the state files a crawl may write into the CLI's state folder. */
+export const STATE_FILE = /^watch-[a-z0-9-]+\.json$/;
 const snapshotSchema = z.object({
   day: daySchema,
-  venueState: z
-    .record(z.string().regex(/^watch-[a-z0-9-]+\.json$/), z.string())
-    .optional(),
+  venueState: z.record(z.string().regex(STATE_FILE), z.string()).optional(),
   result: z.object({
     ...schemas.fetchReport.pick({
       gaps: true,

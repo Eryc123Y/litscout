@@ -10,6 +10,12 @@ import {
 } from "@litscout/pipeline/daily";
 import type { PaperInput } from "@litscout/pipeline/contracts/index";
 import { runAbstracts } from "./abstracts/run";
+import {
+  ATTEMPTS_FILE,
+  isDue,
+  nextAttempts,
+  readAttempts,
+} from "./abstract-attempts";
 import { arxivDays } from "./arxiv-crawl";
 import { venuePapers, commitState } from "./venue-crawl";
 import { crawlLog } from "./crawl-log";
@@ -65,8 +71,17 @@ async function requestMissing(missing: Missing[], deps: CrawlDeps) {
     throw new Error("Malformed abstract reply; no abstracts saved");
   return replies;
 }
-async function missingAbstracts(history: HistoryDay[], deps: CrawlDeps) {
-  const missing = [...history]
+/**
+ * Venue papers in the history still without an abstract, newest first, that are
+ * due for another lookup; the ledger of misses goes into `state`, which is
+ * written once the run's ingest has completed.
+ */
+async function missingAbstracts(
+  history: HistoryDay[],
+  deps: CrawlDeps,
+  state: Map<string, string>,
+) {
+  const lacking = [...history]
     .sort((a, b) => b.day.localeCompare(a.day))
     .flatMap((d) =>
       d.items
@@ -75,10 +90,24 @@ async function missingAbstracts(history: HistoryDay[], deps: CrawlDeps) {
             p.compact !== true && p.source !== "arxiv" && !hasPaperAbstract(p),
         )
         .map((p) => ({ day: d.day, paper: fromFeedItem(p) })),
-    )
+    );
+  const attempts = await readAttempts(deps.dir);
+  const now = deps.now();
+  const missing = lacking
+    .filter((m) => isDue(attempts, m.paper.key, now))
     .slice(0, 200);
-  if (!missing.length) return [];
-  const replies = await requestMissing(missing, deps);
+  const replies = missing.length ? await requestMissing(missing, deps) : [];
+  const ledger = nextAttempts(
+    attempts,
+    new Set(lacking.map((m) => m.paper.key)),
+    missing.map((m, i) => ({
+      key: m.paper.key,
+      found: Boolean(replies[i]!.abstract),
+    })),
+    now,
+  );
+  if (JSON.stringify(ledger) !== JSON.stringify(attempts))
+    state.set(ATTEMPTS_FILE, JSON.stringify(ledger));
   return missing.flatMap((m, i) =>
     replies[i]!.abstract
       ? [{ day: m.day, paper: { ...m.paper, abstract: replies[i]!.abstract! } }]
@@ -156,7 +185,7 @@ async function enrich(
   try {
     for (const filled of deps.signal?.aborted
       ? []
-      : await missingAbstracts(history, deps))
+      : await missingAbstracts(history, deps, state))
       (days[filled.day] ??= []).push(filled.paper);
   } catch (error) {
     deps.report?.(
