@@ -344,7 +344,14 @@ it("reads conferences from OpenAlex by source, keeping works first listed since 
     {
       match: isOpenAlex,
       respond: (url) => {
-        expect(url.searchParams.get("filter")).toBe(
+        const filter = url.searchParams.get("filter")!;
+        if (filter.startsWith("openalex:")) {
+          const ids = filter.slice("openalex:".length).split("|");
+          return json({
+            results: page.filter((w) => ids.includes(w.id.split("/").at(-1)!)),
+          });
+        }
+        expect(filter).toBe(
           "primary_location.source.id:S4210176548,from_publication_date:2025-11-10",
         );
         return json({ results: page, meta: { next_cursor: "next" } });
@@ -353,6 +360,15 @@ it("reads conferences from OpenAlex by source, keeping works first listed since 
   ]);
   expect(await runWatch([...ARGS, "--kinds", "conference"], deps)).toBe(0);
   expect(mock.calls.some((c) => isCrossref(c.url))).toBe(false);
+  // The scan over a year of the venue asks for two fields; full records only
+  // for the works first listed in the window (not W3), once each.
+  const [scan, details, ...rest] = mock.calls
+    .filter((c) => isOpenAlex(c.url))
+    .map((c) => c.url.searchParams);
+  expect(rest).toEqual([]);
+  expect(scan!.get("select")).toBe("id,created_date");
+  expect(details!.get("filter")).toBe("openalex:W1|W2|W5|W7");
+  expect(details!.get("select")).toContain("abstract_inverted_index");
   expect(lines()).toEqual([
     {
       source: "openalex",
@@ -389,11 +405,20 @@ it("pages conference works while pages are full", async () => {
   const { deps, mock, lines } = setup([
     {
       match: isOpenAlex,
-      respond: (url) =>
-        json({
+      respond: (url) => {
+        const filter = url.searchParams.get("filter")!;
+        if (filter.startsWith("openalex:")) {
+          const ids = filter.slice("openalex:".length).split("|");
+          expect(ids.length).toBeLessThanOrEqual(50);
+          return json({
+            results: full.filter((w) => ids.includes(w.id.split("/").at(-1)!)),
+          });
+        }
+        return json({
           results: url.searchParams.get("cursor") === "*" ? full : [],
           meta: { next_cursor: "page2" },
-        }),
+        });
+      },
     },
   ]);
   await runWatch(
@@ -407,6 +432,12 @@ it("pages conference works while pages are full", async () => {
     "*",
     "page2",
   ]);
+  // 200 works in the window: four detail requests of 50.
+  expect(
+    mock.calls.filter((c) =>
+      c.url.searchParams.get("filter")?.startsWith("openalex:"),
+    ),
+  ).toHaveLength(4);
   expect(lines()).toHaveLength(200);
 });
 
