@@ -100,6 +100,23 @@ it("keeps the live release and the two newest others", () => {
   ).toBe(true);
 });
 
+it("orders releases by when they were installed, not by their names", () => {
+  // 11-25: two releases were named in local time and two in UTC, so the name
+  // order put the one installed last before older ones, and it was removed.
+  const dir = home();
+  folder(dir, "litscout/releases/20261125-1650-aaaaaaa", 3);
+  folder(dir, "litscout/releases/20261125-1823-bbbbbbb", 2);
+  folder(dir, "litscout/releases/20261125-1355-ccccccc", 1);
+  folder(dir, "litscout/releases/20261125-1552-ddddddd");
+  symlinkSync(
+    path.join(dir, "litscout/releases/20261125-1552-ddddddd"),
+    path.join(dir, "litscout/current"),
+  );
+  expect(removedPaths(housekeep(dir))).toEqual([
+    "litscout/releases/20261125-1650-aaaaaaa",
+  ]);
+});
+
 it("removes no release when it cannot tell which one is live", () => {
   const dir = home();
   for (const name of ["r1", "r2", "r3", "r4"])

@@ -8,7 +8,7 @@ HOME is the LitScout user's home folder, by default the caller's. Everything
 in it is LitScout's: BASE, Node, the agent CLIs and their state. The limits
 follow ADR 0004 (decision 6):
 
-- releases: the live one and the two newest others (rollback targets);
+- releases: the live one and the two most recently installed others (rollback targets);
 - run logs and notification marks: 30 days, and at most 200 MB of run logs
   (oldest first, never the newest);
 - agent transcripts: 14 days (Antigravity conversations and their brain
@@ -86,9 +86,19 @@ def entries(folder: str) -> list[str]:
         return []
 
 
+def installed_at(path: str) -> tuple[float, str]:
+    """When a release was installed: its folder changes last when npm adds
+    node_modules. Names are no guide: they have been stamped in local time and
+    in UTC (11-25), which put the newest release first."""
+    try:
+        return (os.stat(path).st_mtime, path)
+    except OSError:
+        return (0.0, path)
+
+
 def old_releases(base: str) -> list[str]:
-    """Releases other than the live one and the newest others to keep. Without
-    a live release that is one of them, nothing is chosen."""
+    """Releases other than the live one and the most recently installed others
+    to keep. Without a live release that is one of them, nothing is chosen."""
     folder = os.path.join(base, "releases")
     current = os.path.join(base, "current")
     if not os.path.islink(current):
@@ -97,7 +107,7 @@ def old_releases(base: str) -> list[str]:
     releases = [p for p in entries(folder) if os.path.isdir(p) and not os.path.islink(p)]
     if live not in (os.path.realpath(p) for p in releases):
         return []
-    others = [p for p in releases if os.path.realpath(p) != live]
+    others = sorted((p for p in releases if os.path.realpath(p) != live), key=installed_at)
     return others[: max(0, len(others) - (KEEP_RELEASES - 1))]
 
 
