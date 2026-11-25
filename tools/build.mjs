@@ -2,7 +2,11 @@ import { build } from "esbuild";
 import { build as viteBuild } from "vite";
 import { execFileSync } from "node:child_process";
 import { chmod, writeFile } from "node:fs/promises";
-import { readFileSync } from "node:fs";
+import { readFileSync, rmSync } from "node:fs";
+// Start from an empty folder: the release bundle ships all of apps/cli/dist,
+// and `migrate` runs every file in dist/migrations, so nothing from an earlier
+// build may stay (apps/cli/scripts/dist-check.mjs checks this after a build).
+rmSync("apps/cli/dist", { recursive: true, force: true });
 const sha = execFileSync("git", ["rev-parse", "--short", "HEAD"], {
   encoding: "utf8",
 }).trim();

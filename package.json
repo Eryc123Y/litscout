@@ -17,7 +17,7 @@
     "format:check": "prettier --check .",
     "check:quick": "pnpm format:check && node tools/audit.mjs --static",
     "check": "pnpm check:quick && pnpm typecheck && pnpm lint && pnpm test:coverage && node tools/audit.mjs --tests && pnpm build && pnpm test:e2e",
-    "smoke": "node apps/cli/scripts/worker-smoke.mjs && node apps/cli/scripts/cli-smoke.mjs && node --import tsx tools/rehearsal.mjs",
+    "smoke": "node apps/cli/scripts/dist-check.mjs && node apps/cli/scripts/worker-smoke.mjs && node apps/cli/scripts/cli-smoke.mjs && node --import tsx tools/rehearsal.mjs",
     "verify": "pnpm audit --audit-level high && pnpm check && pnpm smoke",
     "test:worker": "pnpm build && node apps/cli/scripts/worker-smoke.mjs && node apps/cli/scripts/cli-smoke.mjs",
     "test:migrations": "vitest run packages/db/test/migrations.test.ts",
