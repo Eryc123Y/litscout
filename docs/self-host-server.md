@@ -234,7 +234,7 @@ time zone name works too, for example `*-*-* 09:45:00 Europe/Berlin`. The
 weekly summary follows `instance.timezone` in your config. The fetch reads source keys from
 `etc/sources.env` (mode 600, owner `litscout`; `KEY=VALUE` lines for
 `OPENALEX_API_KEY`, `OPENREVIEW_USERNAME` and `OPENREVIEW_PASSWORD` or
-`OPENREVIEW_TOKEN`, `S2_API_KEY`, `UNPAYWALL_EMAIL` and any publisher keys;
+`OPENREVIEW_TOKEN`, `S2_API_KEY` and any publisher keys;
 see [Paper sources and their keys](sources.md)), which
 `litscout-daily@.service` loads when it exists. Then:
 

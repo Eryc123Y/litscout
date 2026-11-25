@@ -167,7 +167,15 @@ async function enrich(
   }
   return venues;
 }
-export function sourceCrawl(config: LitScoutConfig, deps: CrawlDeps) {
+/** The sources' environment: the config's contact address unless the environment sets one. */
+function crawlEnv(config: LitScoutConfig, env: CrawlDeps["env"]) {
+  const email = config.library.unpaywallEmail;
+  return email && !env.UNPAYWALL_EMAIL?.trim()
+    ? { ...env, UNPAYWALL_EMAIL: email }
+    : env;
+}
+export function sourceCrawl(config: LitScoutConfig, given: CrawlDeps) {
+  const deps = { ...given, env: crawlEnv(config, given.env) };
   return (
     ...[
       day,

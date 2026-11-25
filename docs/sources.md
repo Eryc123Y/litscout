@@ -24,8 +24,8 @@ without them. Add keys later, when a check or a log line asks for one.
 | [JMLR](https://www.jmlr.org)                               | New JMLR papers, from its RSS feed                                                 | `jmlr: true` in `venues.json`                              |
 | [Europe PMC](https://europepmc.org)                        | Missing abstracts, by DOI                                                          | Always tried when an abstract is missing                   |
 
-Crossref asks clients to give a contact address. If you set
-`UNPAYWALL_EMAIL` (below), LitScout sends it, and Crossref serves the
+Crossref asks clients to give a contact address. If you set one
+([below](#the-contact-address)), LitScout sends it, and Crossref serves the
 requests from its faster pool.
 
 ### Works better with a key
@@ -81,8 +81,8 @@ Keys are read in two places, and each place has its own file:
   Semantic Scholar and CORE when you add a paper, look one up or search, and
   Unpaywall for open-access links.
 - **The daily run** (`litscout daily fetch`) reads the sources and fills in
-  abstracts. It uses OpenAlex, Semantic Scholar, OpenReview, the publisher
-  keys and the contact address, taken from its environment.
+  abstracts. It uses OpenAlex, Semantic Scholar, OpenReview and the
+  publisher keys, taken from its environment.
 
 So `OPENALEX_API_KEY` and `S2_API_KEY` usually go in both places.
 
@@ -91,20 +91,22 @@ So `OPENALEX_API_KEY` and `S2_API_KEY` usually go in both places.
 | `OPENALEX_API_KEY`                                               |    yes     |      yes      |
 | `S2_API_KEY`                                                     |    yes     |      yes      |
 | `CORE_API_KEY`                                                   |    yes     |               |
-| Contact address (`UNPAYWALL_EMAIL`)                              |    yes     |      yes      |
 | `OPENREVIEW_USERNAME`, `OPENREVIEW_PASSWORD`, `OPENREVIEW_TOKEN` |            |      yes      |
 | `IEEE_API_KEY`, `SPRINGER_API_KEY`, `ELSEVIER_API_KEY`           |            |      yes      |
 
-For the server, set the contact address in the config:
+### The contact address
+
+The contact address for Unpaywall and Crossref is not a secret, so it lives
+in the config, and both places read it from there:
 
 ```ts
 library: { unpaywallEmail: "YOUR_EMAIL_ADDRESS" },
 ```
 
-It reaches a Cloudflare server on the next `litscout deploy`, and your own
-server or a trial on the next `litscout server init --force` and restart.
-For the daily run, put the same address in the run's environment as
-`UNPAYWALL_EMAIL`.
+The daily run uses it from its next run. The server picks it up on the next
+`litscout deploy` on Cloudflare, or on the next `litscout server init
+--force` and restart on your own server or in a trial. An `UNPAYWALL_EMAIL`
+in the daily run's environment takes precedence over the config.
 
 ### On Cloudflare
 
@@ -134,7 +136,6 @@ quotes if it holds spaces or characters such as `$`, as a password may:
 ```text
 OPENALEX_API_KEY=...
 S2_API_KEY=...
-UNPAYWALL_EMAIL=YOUR_EMAIL_ADDRESS
 OPENREVIEW_USERNAME=YOUR_OPENREVIEW_EMAIL
 OPENREVIEW_PASSWORD=...
 ```
