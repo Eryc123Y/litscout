@@ -1,0 +1,368 @@
+{
+  "about": "Venues `litscout init` offers by area. Each entry is a venues.json entry; docs/self-host.md#venue-watchlist describes the fields. Source ids were checked on 2026-11-12.",
+  "areas": [
+    {
+      "name": "Machine learning",
+      "venues": [
+        {
+          "name": "NeurIPS",
+          "kind": "conference",
+          "top": true,
+          "openalex_source": "S4363606243"
+        },
+        {
+          "name": "ICML",
+          "kind": "conference",
+          "top": true,
+          "openalex_source": "S4306419644"
+        },
+        {
+          "name": "ICLR",
+          "kind": "conference",
+          "top": true,
+          "openalex_source": "S4306419637"
+        },
+        {
+          "name": "AISTATS",
+          "kind": "conference",
+          "pmlr": "AISTATS"
+        },
+        {
+          "name": "UAI",
+          "kind": "conference",
+          "pmlr": "UAI"
+        },
+        {
+          "name": "JMLR",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S118988714",
+          "issn": ["1532-4435", "1533-7928"],
+          "jmlr": true
+        },
+        {
+          "name": "TMLR",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S4393919742",
+          "issn": ["2835-8856"],
+          "openreview": "TMLR"
+        }
+      ]
+    },
+    {
+      "name": "Computer vision",
+      "venues": [
+        {
+          "name": "CVPR",
+          "kind": "conference",
+          "top": true,
+          "openalex_source": "S4210176548"
+        },
+        {
+          "name": "ICCV",
+          "kind": "conference",
+          "top": true,
+          "openalex_source": "S4363607764"
+        },
+        {
+          "name": "ECCV",
+          "kind": "conference",
+          "top": true,
+          "container_title": "Computer Vision – ECCV {year}"
+        },
+        {
+          "name": "3DV",
+          "kind": "conference",
+          "openalex_source": "S4363608458"
+        },
+        {
+          "name": "IEEE TPAMI",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S199944782",
+          "issn": ["0162-8828", "1939-3539"]
+        },
+        {
+          "name": "IJCV",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S25538012",
+          "issn": ["0920-5691", "1573-1405"]
+        },
+        {
+          "name": "IEEE TIP",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S4210173141",
+          "issn": ["1057-7149", "1941-0042"]
+        }
+      ]
+    },
+    {
+      "name": "Language and linguistics",
+      "venues": [
+        {
+          "name": "ACL",
+          "kind": "conference",
+          "top": true,
+          "acl_anthology": "acl"
+        },
+        {
+          "name": "EMNLP",
+          "kind": "conference",
+          "top": true,
+          "acl_anthology": "emnlp"
+        },
+        {
+          "name": "NAACL",
+          "kind": "conference",
+          "top": true,
+          "acl_anthology": "naacl"
+        },
+        {
+          "name": "EACL",
+          "kind": "conference",
+          "acl_anthology": "eacl"
+        },
+        {
+          "name": "CoNLL",
+          "kind": "conference",
+          "openalex_source": "S4306418031",
+          "acl_anthology": "conll"
+        },
+        {
+          "name": "COLM",
+          "kind": "conference",
+          "openreview": "colmweb.org/COLM/{year}/Conference"
+        },
+        {
+          "name": "TACL",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S2729999759",
+          "issn": ["2307-387X"],
+          "acl_anthology": "tacl"
+        },
+        {
+          "name": "Computational Linguistics",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S155526855",
+          "issn": ["0891-2017", "1530-9312"],
+          "acl_anthology": "cl"
+        }
+      ]
+    },
+    {
+      "name": "AI, agents and reinforcement learning",
+      "venues": [
+        {
+          "name": "AAAI",
+          "kind": "conference",
+          "top": true,
+          "openalex_source": "S4210191458"
+        },
+        {
+          "name": "IJCAI",
+          "kind": "conference",
+          "top": true,
+          "openalex_source": "S4306419999"
+        },
+        {
+          "name": "AAMAS",
+          "kind": "conference",
+          "top": true,
+          "openalex_source": "S4306417597"
+        },
+        {
+          "name": "RLC",
+          "kind": "conference",
+          "openreview": "rl-conference.cc/RLC/{year}/Conference"
+        },
+        {
+          "name": "JAIR",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S139930977",
+          "issn": ["1076-9757", "1943-5037"]
+        },
+        {
+          "name": "Artificial Intelligence (Elsevier)",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S196139623",
+          "issn": ["0004-3702", "1872-7921"]
+        },
+        {
+          "name": "JAAMAS",
+          "kind": "journal",
+          "openalex_source": "S5405189",
+          "issn": ["1387-2532", "1573-7454"]
+        }
+      ]
+    },
+    {
+      "name": "Learning theory and statistics",
+      "venues": [
+        {
+          "name": "COLT",
+          "kind": "conference",
+          "top": true,
+          "pmlr": "COLT"
+        },
+        {
+          "name": "ALT",
+          "kind": "conference",
+          "pmlr": "ALT"
+        },
+        {
+          "name": "Annals of Statistics",
+          "kind": "journal",
+          "openalex_source": "S119757635",
+          "issn": ["0090-5364", "2168-8966"]
+        },
+        {
+          "name": "IEEE TIT",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S4502562",
+          "issn": ["0018-9448", "1557-9654"]
+        },
+        {
+          "name": "SIMODS",
+          "kind": "journal",
+          "openalex_source": "S4210229561",
+          "issn": ["2577-0187"]
+        },
+        {
+          "name": "Information and Inference",
+          "kind": "journal",
+          "openalex_source": "S2734669121",
+          "issn": ["2049-8764", "2049-8772"]
+        }
+      ]
+    },
+    {
+      "name": "Graphics and multimedia",
+      "venues": [
+        {
+          "name": "ACM TOG",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S185367456",
+          "issn": ["0730-0301", "1557-7368"]
+        },
+        {
+          "name": "IEEE TVCG",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S84775595",
+          "issn": ["1077-2626", "1941-0506"]
+        },
+        {
+          "name": "Computer Graphics Forum",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S67831204",
+          "issn": ["0167-7055", "1467-8659"]
+        },
+        {
+          "name": "ACM MM",
+          "kind": "conference",
+          "top": true,
+          "openalex_source": "S4363608757"
+        },
+        {
+          "name": "IEEE TMM",
+          "kind": "journal",
+          "openalex_source": "S137030581",
+          "issn": ["1520-9210", "1941-0077"]
+        }
+      ]
+    },
+    {
+      "name": "Logic and formal methods",
+      "venues": [
+        {
+          "name": "LICS",
+          "kind": "conference",
+          "top": true,
+          "openalex_source": "S4210192682",
+          "issn": ["1043-6871", "2575-5528"]
+        },
+        {
+          "name": "ICALP",
+          "kind": "conference",
+          "top": true,
+          "doi_prefix": "10.4230/LIPIcs.ICALP"
+        },
+        {
+          "name": "ITP",
+          "kind": "conference",
+          "doi_prefix": "10.4230/LIPIcs.ITP"
+        },
+        {
+          "name": "CPP",
+          "kind": "conference",
+          "openalex_source": "S7407089264"
+        },
+        {
+          "name": "LMCS",
+          "kind": "journal",
+          "openalex_source": "S114379355",
+          "issn": ["1860-5974"]
+        },
+        {
+          "name": "Journal of Automated Reasoning",
+          "kind": "journal",
+          "openalex_source": "S99781599",
+          "issn": ["0168-7433", "1573-0670"]
+        }
+      ]
+    },
+    {
+      "name": "Neural computation and cognition",
+      "venues": [
+        {
+          "name": "Neural Computation",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S207023548",
+          "issn": ["0899-7667", "1530-888X"]
+        },
+        {
+          "name": "Neural Networks",
+          "kind": "journal",
+          "openalex_source": "S123019304",
+          "issn": ["0893-6080", "1879-2782"]
+        },
+        {
+          "name": "IEEE TNNLS",
+          "kind": "journal",
+          "openalex_source": "S4210175523",
+          "issn": ["2162-237X", "2162-2388"]
+        },
+        {
+          "name": "Nature Machine Intelligence",
+          "kind": "journal",
+          "top": true,
+          "openalex_source": "S2912241403",
+          "issn": ["2522-5839"]
+        },
+        {
+          "name": "Cognitive Science",
+          "kind": "journal",
+          "openalex_source": "S78735424",
+          "issn": ["0364-0213", "1551-6709"]
+        },
+        {
+          "name": "PLOS Computational Biology",
+          "kind": "journal",
+          "openalex_source": "S86033158",
+          "issn": ["1553-734X", "1553-7358"]
+        }
+      ]
+    }
+  ]
+}

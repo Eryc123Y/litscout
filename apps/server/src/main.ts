@@ -16,7 +16,8 @@ import { applyMigrations } from "./migrate";
 
 const usage = `litscout-server: run LitScout's Worker on your own machine.
 
-  serve   --config FILE               serve the web app, API and MCP
+  serve   --config FILE               serve the web app, API and MCP (a trial
+                                      applies new migrations first)
   migrate --config FILE [--dry-run]   apply new database migrations
   import  --config FILE --schema FILE --data FILE [--kv FILE]
                                       copy a D1 export into a new state folder
@@ -55,6 +56,19 @@ async function open(listen: boolean) {
 
 async function serve() {
   const { config, mf, url, close } = await open(true);
+  // A trial on this computer prepares its own database: one step less for
+  // someone trying LitScout. A server keeps migrate as a separate step, run
+  // with the service stopped and a snapshot taken.
+  if (config.local) {
+    const db = (await mf.getD1Database("DB")) as unknown as D1Database;
+    const { applied } = await applyMigrations(
+      db,
+      path.join(config.app, "migrations"),
+      {},
+    );
+    if (applied.length)
+      console.log(`Database prepared (${applied.length} migrations applied)`);
+  }
   console.log(`LitScout server on ${url.href} (data in ${config.state})`);
   const [hours, minutes] = config.cronUtc.split(":");
   const cron = `${Number(minutes)} ${Number(hours)} * * *`;

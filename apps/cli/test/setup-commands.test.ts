@@ -298,7 +298,8 @@ it.each([false, true])(
 );
 it("loads the generated template from a child directory", async () => {
   const h = await harness();
-  await runCommand(["init"], h.deps);
+  // The harness has a terminal; --defaults writes the starter unasked.
+  await runCommand(["init", "--defaults"], h.deps);
   await mkdir(path.join(h.dir, "nested"));
   expect(
     (await loadConfig(path.join(h.dir, "nested"))).config.instance.name,

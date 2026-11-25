@@ -70,8 +70,11 @@ it("initializes all starter files and renders notes through the real vault write
   expect(result.code).toBe(0);
   expect(result.data.created).toHaveLength(8);
   expect(result.data.messages.join(" ")).toMatch(/Edit.*litscout.config.ts/);
+  // Every template but the venue catalog, which only `init`'s questions read.
   expect(await readdir(deps.cwd)).toEqual(
-    (await readdir(deps.templateDir)).sort(),
+    (await readdir(deps.templateDir))
+      .filter((name) => name !== "venue-catalog.json")
+      .sort(),
   );
   const sidecar = JSON.parse(
     await readFile(path.join(deps.cwd, "antigravity-sidecar.json"), "utf8"),

@@ -1,8 +1,8 @@
 import { pruneCommand, pruneOptions } from "./prune-command";
 import { serverCommand, serverOptions } from "./server-command";
+import { initCommand, initOptions } from "./init-command";
 import { sidecarCommand, sidecarOptions } from "./sidecar-command";
 import { endpointConfig } from "./endpoint";
-import { access, readFile, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import { managementOptions, runCli } from "./commands";
@@ -46,8 +46,7 @@ function noOptions(
   if (args.length || explicit) throw new UsageError(`Use ${command} [--json]`);
 }
 const documentedCommands = {
-  init: (args: readonly string[], explicit?: string) =>
-    noOptions("init", args, explicit),
+  init: initOptions,
   deploy: deploymentOptions,
   token: tokenOptions,
   pair: (args: readonly string[], explicit?: string) =>
@@ -122,52 +121,6 @@ export function parseCommand(input: readonly string[]) {
   if (command === "abstracts")
     return help ? undefined : noOptions(command, rest);
   return managementOptions(args);
-}
-async function init(deps: SetupDeps): Promise<CommandResult> {
-  const names = [
-    "litscout.config.ts",
-    "venues.json",
-    "vault-paper-template.md",
-    "vault-digest-template.md",
-    "antigravity-sidecar.json",
-    "claude-scheduled-task.md",
-    "codex-exec.md",
-    "cron.md",
-  ];
-  for (const name of names)
-    if (
-      await access(path.join(deps.cwd, name)).then(
-        () => true,
-        () => false,
-      )
-    )
-      throw new UsageError(`Refusing to overwrite ${name}`);
-  const created: string[] = [];
-  try {
-    for (const name of names) {
-      const target = path.join(deps.cwd, name);
-      await writeFile(
-        target,
-        await readFile(path.join(deps.templateDir, name)),
-        { flag: "wx" },
-      );
-      created.push(target);
-    }
-  } catch (error) {
-    await Promise.all(created.map((file) => unlink(file)));
-    throw error;
-  }
-  return {
-    data: {
-      created: names,
-      messages: [
-        `Created: ${names.join(", ")}`,
-        "Edit litscout.config.ts for categories, topics, language, agent mode and optional vault paths.",
-        "Edit venues.json for venues and replace the placeholders in your chosen scheduler example.",
-        "Follow docs/self-host.md for deployment and the first run.",
-      ],
-    },
-  };
 }
 async function configuredCommand(
   args: readonly string[],
@@ -297,8 +250,7 @@ async function dispatch(
     );
   }
   if (command === "init") {
-    documentedCommands.init(rest, explicit);
-    const result = await init(deps);
+    const result = await initCommand(rest, deps, explicit);
     onResolved(path.resolve(deps.cwd, "litscout.config.ts"));
     return result;
   }
@@ -350,7 +302,7 @@ export async function runCommand(
     [command] = parsed.args;
     const result = await dispatch(
       parsed.args,
-      deps,
+      { ...deps, json },
       parsed.explicit,
       (file) => {
         configPath = file;

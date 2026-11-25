@@ -8,6 +8,12 @@ export interface SetupDeps extends CliDeps {
   templateDir: string;
   nodeVersion?: string;
   loadConfig?: () => Promise<LitScoutConfig>;
+  /** --json was given: print JSON and ask no questions. */
+  json?: boolean;
+  /** The home folder a trial's data goes under (~ unless a test sets it). */
+  home?: string;
+  /** The time zone `init` suggests; this computer's unless a test sets it. */
+  timeZone?: () => string;
 }
 export class UsageError extends Error {}
 export interface CommandResult {
