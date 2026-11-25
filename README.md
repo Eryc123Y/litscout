@@ -276,9 +276,9 @@ nice -n 10 pnpm verify
 `pnpm web:local` serves the reader with fixture data at
 `http://127.0.0.1:4173`, with no credentials and no outbound network.
 `pnpm verify` is the merge gate: every change passes it locally before it
-merges. It runs the dependency audit, type checks, lint, tests with coverage
-gates, the build, browser tests, formatting, the repository audit, smoke
-tests and an offline rehearsal of the daily run.
+merges. It runs the dependency audit, formatting, the repository audit, type
+checks, lint, tests with coverage gates, the build, browser tests, smoke tests
+and an offline rehearsal of the daily run.
 [Development](docs/development.md) has the details.
 
 ## Licence

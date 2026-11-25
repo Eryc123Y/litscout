@@ -2,12 +2,18 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import ts from "typescript";
+// `--static` checks the tracked files only and can run first; `--tests` checks
+// the imported tests in the last test run; no flag does both.
+const mode = process.argv[2];
+if (mode !== undefined && mode !== "--static" && mode !== "--tests")
+  throw new Error("usage: node tools/audit.mjs [--static | --tests]");
 const files = execFileSync("git", ["ls-files"], { encoding: "utf8" })
   .trim()
   .split("\n");
 const failures = [];
 const imports = [];
-for (const file of files) {
+const summary = [];
+for (const file of mode === "--tests" ? [] : files) {
   const text = readFileSync(file, "utf8");
   // systemd template instances (name@instance.service) are not addresses.
   const scanned = text.replace(
@@ -51,32 +57,46 @@ function check(specifier, file) {
     imports.push(`${file}: ${specifier}`);
 }
 if (imports.length) failures.push(...imports);
+if (mode !== "--tests") checkLicence();
+if (mode !== "--static") checkImportedTests();
+if (failures.length) throw new Error(failures.join("\n"));
+process.stdout.write(`Audit passed: ${summary.join("; ")}.\n`);
 // The licence (R1, 11-25: AGPL-3.0-or-later): the text at the root and
 // the same SPDX id in every package of the workspace.
-const licence = "AGPL-3.0-or-later";
-if (
-  !files.includes("LICENSE") ||
-  !/^\s*GNU AFFERO GENERAL PUBLIC LICENSE\s+Version 3, 19 November 2007/.test(
-    readFileSync("LICENSE", "utf8"),
+function checkLicence() {
+  const licence = "AGPL-3.0-or-later";
+  if (
+    !files.includes("LICENSE") ||
+    !/^\s*GNU AFFERO GENERAL PUBLIC LICENSE\s+Version 3, 19 November 2007/.test(
+      readFileSync("LICENSE", "utf8"),
+    )
   )
-)
-  failures.push("LICENSE is not the GNU AGPL version 3 text");
-for (const file of files.filter((f) => path.basename(f) === "package.json"))
-  if (JSON.parse(readFileSync(file, "utf8")).license !== licence)
-    failures.push(`${file}: license is not ${licence}`);
-const imported = JSON.parse(readFileSync("tools/imported-tests.json", "utf8"));
-const results = JSON.parse(
-  readFileSync(".artifacts/test-results.json", "utf8"),
-);
-const selected = results.testResults.filter((r) =>
-  imported.includes(path.relative(process.cwd(), r.name)),
-);
-if (
-  selected.length !== imported.length ||
-  selected.some((r) => r.status !== "passed")
-)
-  failures.push("Some imported test files did not pass");
-if (failures.length) throw new Error(failures.join("\n"));
-process.stdout.write(
-  `Audit passed: ${files.length} tracked files; no token/contact literals or package-crossing relative imports; AGPL-3.0-or-later in LICENSE and every package; ${selected.length} imported test files, ${selected.reduce((n, r) => n + r.assertionResults.length, 0)} imported tests passed.\n`,
-);
+    failures.push("LICENSE is not the GNU AGPL version 3 text");
+  for (const file of files.filter((f) => path.basename(f) === "package.json"))
+    if (JSON.parse(readFileSync(file, "utf8")).license !== licence)
+      failures.push(`${file}: license is not ${licence}`);
+  summary.push(
+    `${files.length} tracked files`,
+    "no token/contact literals or package-crossing relative imports",
+    `${licence} in LICENSE and every package`,
+  );
+}
+function checkImportedTests() {
+  const imported = JSON.parse(
+    readFileSync("tools/imported-tests.json", "utf8"),
+  );
+  const results = JSON.parse(
+    readFileSync(".artifacts/test-results.json", "utf8"),
+  );
+  const selected = results.testResults.filter((r) =>
+    imported.includes(path.relative(process.cwd(), r.name)),
+  );
+  if (
+    selected.length !== imported.length ||
+    selected.some((r) => r.status !== "passed")
+  )
+    failures.push("Some imported test files did not pass");
+  summary.push(
+    `${selected.length} imported test files, ${selected.reduce((n, r) => n + r.assertionResults.length, 0)} imported tests passed`,
+  );
+}

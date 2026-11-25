@@ -1,6 +1,7 @@
 name: CI
-# Checks run locally before merging: `nice -n 10 pnpm verify` (see docs/self-host.md).
-# This workflow runs the same command on every pull request and on pushes to main.
+# Checks run locally before merging: `nice -n 10 pnpm verify` (see docs/development.md).
+# This workflow runs the same checks as parallel jobs on every pull request and on
+# pushes to main. `verify` passes only when every other job passed or was skipped.
 on:
   pull_request:
   push:
@@ -13,19 +14,71 @@ concurrency:
 permissions:
   contents: read
 jobs:
-  verify:
+  scope:
+    name: Scope
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 5
+    outputs:
+      code: ${{ steps.scope.outputs.code }}
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
+          fetch-depth: 0
+      # Documentation-only changes skip the code jobs; a hand-dispatched run has
+      # no base, so it runs everything.
+      - id: scope
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: node tools/ci-scope.mjs "$BASE" "$HEAD" >> "$GITHUB_OUTPUT"
+
+  quick:
+    name: Audit and formatting
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm check:quick
+      - run: pnpm audit --audit-level high
+
+  static:
+    name: Types and lint
+    needs: scope
+    if: needs.scope.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm typecheck
+      - run: pnpm lint
+
+  unit:
+    name: Unit tests
+    needs: scope
+    if: needs.scope.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm test:coverage
+      - run: node tools/audit.mjs --tests
+
+  browser:
+    name: Build, browser tests and rehearsal
+    needs: scope
+    if: needs.scope.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm verify
+      - run: pnpm build
+      - run: pnpm test:e2e
+      - run: pnpm smoke
       - name: Upload the rehearsal transcript
         if: failure()
         uses: actions/upload-artifact@v4
@@ -35,3 +88,21 @@ jobs:
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 14
+
+  verify:
+    name: verify
+    if: always()
+    needs: [scope, quick, static, unit, browser]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          for result in $RESULTS; do
+            case "$result" in
+              success | skipped) ;;
+              *) echo "A job ended with: $result"; exit 1 ;;
+            esac
+          done
+          echo "All jobs passed or were skipped: $RESULTS"

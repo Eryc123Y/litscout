@@ -22,7 +22,7 @@ The workspace layout is in the [README](../README.md#development). The
 ## The merge gate
 
 Every change passes `pnpm verify` locally before it merges. GitHub Actions
-runs the same command on every pull request and on pushes to `main`.
+runs the same checks on every pull request and on pushes to `main`.
 
 ```sh
 nice -n 10 pnpm verify
@@ -31,16 +31,23 @@ nice -n 10 pnpm verify
 It runs, in order:
 
 1. `pnpm audit --audit-level high`, the dependency audit.
-2. `pnpm check`: strict type checks, lint, unit and integration tests with
-   coverage gates, the build, desktop and phone Playwright flows, the
-   formatting check (`pnpm format:check`) and the repository audit
-   (`tools/audit.mjs`).
-3. The Worker and CLI bundle smoke tests.
-4. The offline rehearsal of the daily run
+2. `pnpm check`: first the quick checks (`pnpm check:quick`: the formatting
+   check and the repository audit's file checks, `tools/audit.mjs --static`),
+   which fail in seconds; then strict type checks, lint, unit and integration
+   tests with coverage gates, the audit of the imported tests
+   (`tools/audit.mjs --tests`), the build, and desktop and phone Playwright
+   flows.
+3. `pnpm smoke`: the Worker and CLI bundle smoke tests and the offline
+   rehearsal of the daily run
    ([what it checks](self-host.md#rehearse-the-daily-runbook-locally)).
 
-The GitHub workflow runs the same command when dispatched by hand from the
-Actions tab. [Workflow](../.github/workflows/ci.yml)
+The GitHub workflow splits these into parallel jobs: the quick checks with the
+dependency audit, types and lint, unit tests, and the build with the browser
+tests, smoke tests and rehearsal. A last job, `verify`, passes only when all of
+them pass. A change that touches only documentation runs the quick checks
+alone, unless a test reads one of the changed documents by its path
+([`tools/ci-scope.mjs`](../tools/ci-scope.mjs)). Dispatching the workflow by
+hand from the Actions tab runs everything. [Workflow](../.github/workflows/ci.yml)
 
 Tests block external network calls. D1 tests use a local workerd.
 
