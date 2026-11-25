@@ -623,7 +623,7 @@ async function maintenance(command, api, cli, directory) {
         [thursday, tuesday, monday].map((day) => ({
           kind: "digest",
           mode: "planned",
-          path: "Claude/Scheduled/litscout-daily/digests-new/" + day + ".md",
+          path: "LitScout/Digests/" + day + ".md",
         })),
       );
       assert.match(data.summary, /^Dry-run · index planned/);
