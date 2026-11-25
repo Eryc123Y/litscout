@@ -63,7 +63,7 @@ export function Settings({
             </div>
           </fieldset>
         </SettingRow>
-        <SettingRow title="Topics" hint="Set in the instance configuration">
+        <SettingRow title="Topics" hint="Set in litscout.config.ts">
           {topics.length ? (
             <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">
               {topics.map((topic) => (

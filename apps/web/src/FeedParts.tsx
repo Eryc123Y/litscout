@@ -14,6 +14,7 @@ import type { WebFeed, WebPaper } from "@litscout/pipeline/web-contracts";
 import { Paper } from "./Paper";
 import { dayLabel } from "./model";
 import { TopicLabel } from "./TopicLabel";
+import { FirstRun } from "./FirstRun";
 import { Button } from "./components/ui/button";
 import {
   EmptyState,
@@ -259,21 +260,32 @@ export function FullPaper({
   );
 }
 /** The reader column on a day with nothing yet: says so, and points to the
- * latest day that has a digest. */
+ * latest day that has a digest. On a new LitScout, before any day has
+ * papers, it welcomes the reader instead. */
 export function EmptyDay({
   day,
   status,
   today,
   base,
   isPublic,
+  topics = [],
+  keywordOnly = false,
 }: {
   day: string;
   status: string;
   today: string;
   base: string;
   isPublic: boolean;
+  topics?: readonly string[];
+  keywordOnly?: boolean;
 }) {
   const days = useDays(isPublic);
+  if (
+    !isPublic &&
+    days.isSuccess &&
+    !days.data.items.some((item) => item.counts.total > 0)
+  )
+    return <FirstRun topics={topics} keywordOnly={keywordOnly} />;
   const latest = days.data?.items
     .filter(
       (item) =>

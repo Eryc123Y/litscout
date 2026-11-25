@@ -344,6 +344,8 @@ function ReadingWorkspace({
       today={today(instance.timezone)}
       base={base}
       isPublic={isPublic}
+      topics={instance.topics}
+      keywordOnly={keywordOnly}
     />
   );
   // The reader's keys work anywhere on the page: the list or the reader.
