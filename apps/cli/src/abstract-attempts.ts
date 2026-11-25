@@ -3,7 +3,9 @@
  * Many never get one from a free source (an editorial, a publisher without a
  * key), and asking for all of them on every run took minutes each time. A miss
  * waits 1, 2, 4, 8, then 16 days; a paper leaves the ledger once it has an
- * abstract or leaves the 60-day history.
+ * abstract or leaves the 60-day history. When a source could not check a paper
+ * (an outage, a timeout, the run's time budget), it is asked again a day later
+ * and the miss is not counted, so an outage never pushes a paper back weeks.
  */
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -16,7 +18,8 @@ const MAX_DOUBLINGS = 4;
 
 const attemptsSchema = z.record(
   z.string(),
-  z.object({ tries: z.number().int().min(1), next: z.iso.datetime() }),
+  /** `tries` counts confirmed misses; 0 when only outages kept the paper waiting. */
+  z.object({ tries: z.number().int().min(0), next: z.iso.datetime() }),
 );
 export type Attempts = z.infer<typeof attemptsSchema>;
 
@@ -40,26 +43,33 @@ export function isDue(attempts: Attempts, key: string, now: Date): boolean {
   return !entry || Date.parse(entry.next) <= now.getTime();
 }
 
+/** What a lookup said about one paper. */
+export type Outcome = "found" | "missed" | "unchecked";
+
 /**
  * The ledger after a lookup. `lacking` holds every paper still without an
- * abstract; `asked` the ones looked up this run and whether one was found.
+ * abstract; `asked` the ones looked up this run and what came of it.
  */
 export function nextAttempts(
   previous: Attempts,
   lacking: ReadonlySet<string>,
-  asked: readonly { key: string; found: boolean }[],
+  asked: readonly { key: string; outcome: Outcome }[],
   now: Date,
 ): Attempts {
-  const outcome = new Map(asked.map(({ key, found }) => [key, found]));
+  const outcomes = new Map(asked.map(({ key, outcome }) => [key, outcome]));
+  const after = (days: number) =>
+    new Date(now.getTime() + days * DAY_MS).toISOString();
   return Object.fromEntries(
     [...lacking].flatMap((key) => {
-      const found = outcome.get(key);
-      if (found === true) return [];
-      if (found === undefined)
-        return previous[key] ? [[key, previous[key]]] : [];
-      const tries = (previous[key]?.tries ?? 0) + 1;
-      const next = new Date(now.getTime() + backoffDays(tries) * DAY_MS);
-      return [[key, { tries, next: next.toISOString() }]];
+      const outcome = outcomes.get(key);
+      const tries = previous[key]?.tries ?? 0;
+      if (outcome === "found") return [];
+      if (outcome === "unchecked") return [[key, { tries, next: after(1) }]];
+      if (outcome === "missed")
+        return [
+          [key, { tries: tries + 1, next: after(backoffDays(tries + 1)) }],
+        ];
+      return previous[key] ? [[key, previous[key]]] : [];
     }),
   );
 }

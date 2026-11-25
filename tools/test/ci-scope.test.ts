@@ -1,6 +1,10 @@
+import { execFileSync } from "node:child_process";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 // @ts-expect-error -- a plain ES module without types
-import { isChecker, needsCode } from "../ci-scope.mjs";
+import { changedFiles, isChecker, needsCode } from "../ci-scope.mjs";
 
 const tests = [
   'const guide = await readFile("docs/self-host.md", "utf8");',
@@ -43,5 +47,27 @@ describe("isChecker", () => {
     expect(isChecker("tools/rehearsal.mjs")).toBe(true);
     expect(isChecker("apps/cli/src/commands.ts")).toBe(false);
     expect(isChecker("apps/cli/test/fixtures/day.json")).toBe(false);
+  });
+});
+
+describe("changedFiles", () => {
+  it("lists both paths of a rename, so moving code into docs/ is not a docs-only change", () => {
+    const repo = mkdtempSync(path.join(tmpdir(), "ci-scope-"));
+    const git = (...args: string[]) =>
+      execFileSync("git", ["-C", repo, ...args], { encoding: "utf8" }).trim();
+    git("init", "-q");
+    git("config", "user.email", "ci-scope");
+    git("config", "user.name", "ci-scope");
+    mkdirSync(path.join(repo, "apps"));
+    writeFileSync(path.join(repo, "apps", "tool.ts"), "export const a = 1;\n");
+    git("add", ".");
+    git("commit", "-q", "-m", "base");
+    const base = git("rev-parse", "HEAD");
+    mkdirSync(path.join(repo, "docs"));
+    git("mv", "apps/tool.ts", "docs/tool.md");
+    git("commit", "-q", "-m", "move");
+    const changed = changedFiles(base, git("rev-parse", "HEAD"), repo);
+    expect(changed.sort()).toEqual(["apps/tool.ts", "docs/tool.md"]);
+    expect(needsCode(changed, [])).toBe(true);
   });
 });

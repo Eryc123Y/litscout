@@ -22,6 +22,7 @@ vi.mock("@litscout/sources/watch/library", async (importOriginal) => ({
 /** Abstracts found by the lookup, by paper key; every other key is a miss. */
 const lookup = vi.hoisted(() => ({
   found: {} as Record<string, string>,
+  unchecked: [] as string[],
   asked: [] as string[][],
 }));
 vi.mock("../src/abstracts/run", () => ({
@@ -30,6 +31,7 @@ vi.mock("../src/abstracts/run", () => ({
     deps: {
       readStdin: () => Promise<string>;
       stdout: (s: string) => void;
+      onUnchecked?: (u: ReadonlyMap<string, readonly string[]>) => void;
     },
   ) => {
     const ids = (await deps.readStdin())
@@ -44,6 +46,13 @@ vi.mock("../src/abstracts/run", () => ({
           source: lookup.found[id] ? "openalex" : null,
         }) + "\n",
       );
+    deps.onUnchecked?.(
+      new Map(
+        ids
+          .filter((id) => lookup.unchecked.includes(id))
+          .map((id) => [id, ["europepmc"]]),
+      ),
+    );
     return 0;
   },
 }));
@@ -64,14 +73,28 @@ describe("the attempts ledger", () => {
     };
     const lacking = new Set(["doi:10.1/a", "doi:10.1/b", "doi:10.1/waiting"]);
     const asked = [
-      { key: "doi:10.1/a", found: false },
-      { key: "doi:10.1/b", found: true },
-    ];
+      { key: "doi:10.1/a", outcome: "missed" },
+      { key: "doi:10.1/b", outcome: "found" },
+    ] as const;
     expect(nextAttempts(previous, lacking, asked, start)).toEqual({
       "doi:10.1/a": { tries: 3, next: "2026-11-29T03:00:00.000Z" },
       "doi:10.1/waiting": previous["doi:10.1/waiting"],
     });
     expect(previous["doi:10.1/a"].tries).toBe(2);
+  });
+  it("asks again a day later, without counting a miss, when a source could not check a paper", () => {
+    const previous = {
+      "doi:10.1/a": { tries: 3, next: "2026-11-25T00:00:00.000Z" },
+    };
+    const lacking = new Set(["doi:10.1/a", "doi:10.1/new"]);
+    const asked = [
+      { key: "doi:10.1/a", outcome: "unchecked" },
+      { key: "doi:10.1/new", outcome: "unchecked" },
+    ] as const;
+    expect(nextAttempts(previous, lacking, asked, start)).toEqual({
+      "doi:10.1/a": { tries: 3, next: "2026-11-26T03:00:00.000Z" },
+      "doi:10.1/new": { tries: 0, next: "2026-11-26T03:00:00.000Z" },
+    });
   });
   it("treats a paper as due when it has no entry or its time has come", () => {
     const attempts = {
@@ -185,6 +208,26 @@ describe("the daily run's abstract retry", () => {
         "doi:10.1/a"
       ],
     ).toEqual({ tries: 2, next: "2026-11-28T03:00:00.000Z" });
+  });
+  it("asks once for a paper listed on two days, and only a day later after an outage", async () => {
+    const dir = mkdtempSync(path.join(tmpdir(), "crawl-"));
+    lookup.asked = [];
+    lookup.found = {};
+    lookup.unchecked = ["doi:10.1/a", "doi:10.1/b"];
+    const twice = [
+      ...history(),
+      { ...history()[0]!, day: "2026-11-21" },
+    ] as HistoryDay[];
+    const first = await crawl(dir, start, twice);
+    expect(lookup.asked).toEqual([["doi:10.1/a", "doi:10.1/b"]]);
+    await first.settled?.();
+    expect(
+      JSON.parse(readFileSync(path.join(dir, ATTEMPTS_FILE), "utf8")),
+    ).toEqual({
+      "doi:10.1/a": { tries: 0, next: "2026-11-26T03:00:00.000Z" },
+      "doi:10.1/b": { tries: 0, next: "2026-11-26T03:00:00.000Z" },
+    });
+    lookup.unchecked = [];
   });
   it("records nothing when the run's ingest does not complete", async () => {
     const dir = mkdtempSync(path.join(tmpdir(), "crawl-"));

@@ -143,7 +143,15 @@ jobs:
     steps:
       - env:
           RESULTS: ${{ join(needs.*.result, ' ') }}
+          SCOPE: ${{ needs.scope.result }}
+          QUICK: ${{ needs.quick.result }}
+        # The quick checks run on every change and the scope decides the rest:
+        # both must have run. The code jobs may be skipped for documentation.
         run: |
+          if [ "$SCOPE" != success ] || [ "$QUICK" != success ]; then
+            echo "Scope ($SCOPE) and the quick checks ($QUICK) must both succeed"
+            exit 1
+          fi
           for result in $RESULTS; do
             case "$result" in
               success | skipped) ;;

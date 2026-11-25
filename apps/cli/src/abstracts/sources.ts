@@ -73,11 +73,12 @@ const s2: Stage = {
   async run(pending, ctx) {
     const items = withDoi(pending);
     if (!items.length) return NOTHING;
-    if (ctx.expired()) return { found: new Map(), skipped: 1 };
+    const all = new Set(items.map((item) => item.index));
+    if (ctx.expired()) return { found: new Map(), skipped: 1, unchecked: all };
     const papers = await attempt(() =>
       ctx.s2.abstractBatch(items.map((p) => `DOI:${p.doi}`)),
     );
-    if (failed(papers)) return { found: new Map(), skipped: 1 };
+    if (failed(papers)) return { found: new Map(), skipped: 1, unchecked: all };
     const results = new Map<number, Found>();
     items.forEach((item, i) => {
       const paper = papers?.[i];
@@ -104,15 +105,19 @@ const arxiv: Stage = {
     const withId = pending.filter((p) => p.arxiv);
     const ids = [...new Set(withId.map((p) => p.arxiv!))];
     const abstracts = new Map<string, string>();
+    const failedIds = new Set<string>();
     for (let i = 0; i < ids.length; i += ARXIV_BATCH) {
+      const batch = ids.slice(i, i + ARXIV_BATCH);
       if (ctx.expired()) {
         skipped += 1;
+        batch.forEach((id) => failedIds.add(id));
         continue;
       }
-      const papers = await attempt(() =>
-        ctx.arxiv.byIds(ids.slice(i, i + ARXIV_BATCH)),
-      );
-      if (failed(papers)) skipped += 1;
+      const papers = await attempt(() => ctx.arxiv.byIds(batch));
+      if (failed(papers)) {
+        skipped += 1;
+        batch.forEach((id) => failedIds.add(id));
+      }
       (failed(papers) ? [] : (papers ?? [])).forEach((paper) => {
         const text = cleanAbstract(paper.abstract);
         if (paper.arxiv && text) abstracts.set(paper.arxiv.toLowerCase(), text);
@@ -133,7 +138,13 @@ const arxiv: Stage = {
       ctx,
     );
     byTitle.found.forEach((hit, index) => results.set(index, hit));
-    return { found: results, skipped: skipped + byTitle.skipped };
+    const unchecked = new Set([
+      ...withId
+        .filter((item) => failedIds.has(item.arxiv!))
+        .map((item) => item.index),
+      ...(byTitle.unchecked ?? []),
+    ]);
+    return { found: results, skipped: skipped + byTitle.skipped, unchecked };
   },
 };
 

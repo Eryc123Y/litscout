@@ -15,6 +15,7 @@ import {
   isDue,
   nextAttempts,
   readAttempts,
+  type Outcome,
 } from "./abstract-attempts";
 import { arxivDays } from "./arxiv-crawl";
 import { venuePapers, commitState } from "./venue-crawl";
@@ -44,7 +45,11 @@ function abstractRequest(p: PaperInput) {
 }
 async function requestMissing(missing: Missing[], deps: CrawlDeps) {
   const lines: string[] = [];
+  let unchecked: ReadonlySet<string> = new Set();
   const code = await runAbstracts([], {
+    onUnchecked: (items) => {
+      unchecked = new Set(items.keys());
+    },
     fetch: deps.fetch,
     env: deps.env,
     readStdin: async () =>
@@ -69,7 +74,14 @@ async function requestMissing(missing: Missing[], deps: CrawlDeps) {
     replies.some((r, i) => r.id !== missing[i]!.paper.key)
   )
     throw new Error("Malformed abstract reply; no abstracts saved");
-  return replies;
+  return replies.map((reply) => ({
+    ...reply,
+    outcome: (reply.abstract
+      ? "found"
+      : unchecked.has(reply.id)
+        ? "unchecked"
+        : "missed") as Outcome,
+  }));
 }
 /**
  * Venue papers in the history still without an abstract, newest first, that are
@@ -94,17 +106,19 @@ async function missingAbstracts(
     );
   const attempts = await readAttempts(deps.dir);
   const now = deps.now();
-  const missing = lacking
+  // A paper listed on several days is looked up once, under its newest day.
+  const newest = new Map(
+    lacking.map((m) => [m.paper.key, m] as const).reverse(),
+  );
+  const missing = [...new Set(lacking.map((m) => m.paper.key))]
+    .map((key) => newest.get(key)!)
     .filter((m) => isDue(attempts, m.paper.key, now))
     .slice(0, 200);
   const replies = missing.length ? await requestMissing(missing, deps) : [];
   const ledger = nextAttempts(
     attempts,
     new Set(lacking.map((m) => m.paper.key)),
-    missing.map((m, i) => ({
-      key: m.paper.key,
-      found: Boolean(replies[i]!.abstract),
-    })),
+    missing.map((m, i) => ({ key: m.paper.key, outcome: replies[i]!.outcome })),
     now,
   );
   if (JSON.stringify(ledger) !== JSON.stringify(attempts))

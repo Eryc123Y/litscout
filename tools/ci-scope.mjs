@@ -33,12 +33,17 @@ export function needsCode(changed, checkers) {
   );
 }
 
-const git = (...args) => execFileSync("git", args, { encoding: "utf8" });
+const git = (repo, ...args) =>
+  execFileSync("git", ["-C", repo, ...args], { encoding: "utf8" });
 
-function changedFiles(base, head) {
+/**
+ * Paths changed between the merge base of `base` and `head`, and `head`. A rename lists both its
+ * old and new path (`--no-renames`), so moving code into docs/ is not a documentation change.
+ */
+export function changedFiles(base, head, repo = ".") {
   if (!base || /^0+$/.test(base) || !head) return [];
   try {
-    return git("diff", "--name-only", `${base}...${head}`)
+    return git(repo, "diff", "--name-only", "--no-renames", `${base}...${head}`)
       .split("\n")
       .filter(Boolean);
   } catch {
@@ -49,7 +54,7 @@ function changedFiles(base, head) {
 
 function main([base, head]) {
   const changed = changedFiles(base, head);
-  const checkers = git("ls-files")
+  const checkers = git(".", "ls-files")
     .split("\n")
     .filter(isChecker)
     .map((file) => readFileSync(file, "utf8"));

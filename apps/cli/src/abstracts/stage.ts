@@ -40,6 +40,8 @@ export interface StageResult {
   readonly found: ReadonlyMap<number, Found>;
   /** Requests that failed (timeout, 429, 5xx, unreadable data); "not found" is not a failure. */
   readonly skipped: number;
+  /** Items whose request failed or was skipped, so the stage could not say "not found". */
+  readonly unchecked?: ReadonlySet<number>;
 }
 
 export interface AbstractsContext {
@@ -115,6 +117,7 @@ export async function perItem(
 ): Promise<StageResult> {
   const results = new Map<number, Found>();
   const memo = new Map<string, Found | null | typeof FAILED>();
+  const unchecked = new Set<number>();
   let skipped = 0;
   let streak = 0;
   for (const item of items) {
@@ -122,6 +125,7 @@ export async function perItem(
     if (!memo.has(key)) {
       if (streak >= BREAKER || ctx.expired()) {
         skipped += 1;
+        unchecked.add(item.index);
         continue;
       }
       const outcome = await attempt(() => lookup(item));
@@ -130,9 +134,10 @@ export async function perItem(
       memo.set(key, outcome);
     }
     const outcome = memo.get(key);
-    if (outcome && !failed(outcome)) results.set(item.index, outcome);
+    if (failed(outcome)) unchecked.add(item.index);
+    else if (outcome) results.set(item.index, outcome);
   }
-  return { found: results, skipped };
+  return { found: results, skipped, unchecked };
 }
 
 export function withDoi(

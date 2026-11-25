@@ -85,6 +85,7 @@ function setup(
   const out: string[] = [];
   const err: string[] = [];
   const slept: number[] = [];
+  let unchecked: ReadonlyMap<string, readonly string[]> = new Map();
   const stdin =
     typeof lines === "string"
       ? lines
@@ -99,6 +100,9 @@ function setup(
       slept.push(ms);
     },
     now,
+    onUnchecked: (items) => {
+      unchecked = items;
+    },
   };
   return {
     calls: mock.calls,
@@ -106,6 +110,7 @@ function setup(
     run: (argv: readonly string[] = []) => runAbstracts(argv, deps),
     out: () => out.join(""),
     err: () => err.join(""),
+    unchecked: () => unchecked,
     results: () =>
       out
         .join("")
@@ -726,6 +731,36 @@ describe("litscout abstracts: limits", () => {
     expect(new Set(queries).size).toBe(3);
     expect(t.err()).toMatch(/5 skipped requests/);
     expect(t.results()).toHaveLength(5);
+    // Every item lacks Europe PMC's answer, so none is a confirmed miss.
+    expect(t.unchecked()).toEqual(
+      new Map(items.map((item) => [item.id, ["europepmc"]])),
+    );
+  });
+
+  it("reports only the items a failing source left unchecked", async () => {
+    const t = setup(
+      [
+        { id: "a", doi: "10.1234/a" },
+        { id: "b", doi: "10.1234/b" },
+        { id: "c", doi: "10.1234/c" },
+      ],
+      [
+        {
+          match: host("api.crossref.org", /10\.1234\/a$/),
+          respond: () =>
+            json({
+              message: { abstract: `<jats:p>${text("Found")}</jats:p>` },
+            }),
+        },
+        {
+          match: host("api.crossref.org", /10\.1234\/b$/),
+          respond: () => json({}, 503),
+        },
+      ],
+    );
+    await t.run();
+    expect(t.results().map((r) => r.source)).toEqual(["crossref", null, null]);
+    expect(t.unchecked()).toEqual(new Map([["b", ["crossref"]]]));
   });
 
   it("asks an uncached source once per DOI, however often the DOI repeats", async () => {

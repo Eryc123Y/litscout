@@ -441,6 +441,37 @@ it("pages conference works while pages are full", async () => {
   expect(lines()).toHaveLength(200);
 });
 
+it("warns about conference works listed in the window that OpenAlex does not return in full", async () => {
+  const listed = [
+    { id: "https://openalex.org/W1", created_date: "2026-11-11" },
+    { id: "https://openalex.org/W2", created_date: "2026-11-11" },
+    { id: "https://openalex.org/works/odd", created_date: "2026-11-11" },
+  ];
+  const { deps, err, lines } = setup([
+    {
+      match: isOpenAlex,
+      respond: (url) =>
+        url.searchParams.get("filter")!.startsWith("openalex:")
+          ? json({
+              results: [
+                {
+                  id: "https://openalex.org/W1",
+                  display_name: "Kept paper",
+                  publication_date: "2026-06-01",
+                  created_date: "2026-11-11",
+                },
+              ],
+            })
+          : json({ results: listed }),
+    },
+  ]);
+  expect(await runWatch([...ARGS, "--kinds", "conference"], deps)).toBe(0);
+  expect(lines().map((l) => l.title)).toEqual(["Kept paper"]);
+  expect(err.join("")).toContain(
+    "CVPR: 2 works listed by OpenAlex in the window could not be read in full; skipped",
+  );
+});
+
 it("exits 1 with a one-line reason when every source request fails", async () => {
   const { deps, out, err } = setup([
     { match: isCrossref, respond: () => json({}, 503) },

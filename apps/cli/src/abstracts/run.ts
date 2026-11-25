@@ -33,6 +33,15 @@ export interface AbstractsDeps {
   readonly sleep?: (ms: number) => Promise<void>;
   /** Milliseconds since the epoch; the time budget is measured with it. */
   readonly now?: () => number;
+  /**
+   * Items still without an abstract that some source could not check (its
+   * request failed or was skipped), by input id, with those sources' names.
+   * Not part of the output contract: the daily run uses it to tell a real miss
+   * from an outage.
+   */
+  readonly onUnchecked?: (
+    unchecked: ReadonlyMap<string, readonly SourceName[]>,
+  ) => void;
 }
 
 export const USAGE =
@@ -119,11 +128,18 @@ function pendingOf(slots: readonly Slot[]): Pending[] {
   );
 }
 
-/** Runs the stages in order over the items still empty; returns final slots and skipped count. */
+/**
+ * Runs the stages in order over the items still empty; returns the final slots, the skipped
+ * count, and for each item the stages that could not check it.
+ */
 async function fill(
   requests: readonly AbstractRequest[],
   ctx: AbstractsContext,
-): Promise<{ slots: readonly Slot[]; skipped: number }> {
+): Promise<{
+  slots: readonly Slot[];
+  skipped: number;
+  unchecked: ReadonlyMap<number, readonly SourceName[]>;
+}> {
   let slots: readonly Slot[] = requests.map((request) => ({
     request,
     arxiv: request.arxiv,
@@ -131,14 +147,24 @@ async function fill(
     source: null,
   }));
   let skipped = 0;
+  let unchecked = new Map<number, readonly SourceName[]>();
   for (const stage of STAGES) {
     const pending = pendingOf(slots);
     if (!pending.length) break;
     // Stages turn source failures into skipped requests; anything else skips the whole stage.
-    const result: StageResult = await stage
-      .run(pending, ctx)
-      .catch(() => ({ found: new Map(), skipped: pending.length }));
+    const result: StageResult = await stage.run(pending, ctx).catch(() => ({
+      found: new Map(),
+      skipped: pending.length,
+      unchecked: new Set(pending.map((item) => item.index)),
+    }));
     skipped += result.skipped;
+    unchecked = new Map([
+      ...unchecked,
+      ...[...(result.unchecked ?? [])].map(
+        (index) =>
+          [index, [...(unchecked.get(index) ?? []), stage.name]] as const,
+      ),
+    ]);
     slots = slots.map((slot, index) => {
       const hit = result.found.get(index);
       if (!hit || slot.abstract) return slot;
@@ -150,7 +176,7 @@ async function fill(
       };
     });
   }
-  return { slots, skipped };
+  return { slots, skipped, unchecked };
 }
 
 function summary(
@@ -190,7 +216,14 @@ export async function runAbstracts(
   }
   try {
     const ctx = context(deps);
-    const { slots, skipped } = await fill(requests, ctx);
+    const { slots, skipped, unchecked } = await fill(requests, ctx);
+    deps.onUnchecked?.(
+      new Map(
+        [...unchecked]
+          .filter(([index]) => !slots[index]!.abstract)
+          .map(([index, stages]) => [slots[index]!.request.id, stages]),
+      ),
+    );
     slots.forEach((slot) =>
       deps.stdout(
         `${JSON.stringify({ id: slot.request.id, abstract: slot.abstract, source: slot.source })}\n`,

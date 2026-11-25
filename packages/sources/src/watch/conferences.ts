@@ -92,14 +92,19 @@ interface Listed {
   readonly created_date?: string | null;
 }
 
-/** The venue's works first listed in the window, in OpenAlex's order, and how many were not. */
+/**
+ * The venue's works first listed in the window, in OpenAlex's order; how many were not; and how
+ * many were listed in the window but could not be read in full (an id of another form, or a work
+ * the detail request did not return).
+ */
 async function venueWorks(
   ctx: WatchContext,
   source: string,
-): Promise<{ works: ConferenceWork[]; outside: number }> {
+): Promise<{ works: ConferenceWork[]; outside: number; unread: number }> {
   const filter = `primary_location.source.id:${source.replace(/[,|]/g, "")},from_publication_date:${yearBefore(ctx.window.since)}`;
   const listed: string[] = [];
   let outside = 0;
+  let unread = 0;
   let cursor: string | undefined = "*";
   for (let n = 0; cursor && n < MAX_PAGES; n += 1) {
     const page: { results: Listed[]; nextCursor?: string } =
@@ -111,9 +116,9 @@ async function venueWorks(
       });
     for (const work of page.results) {
       const id = workId(work.id);
-      if (id && inWindow(dayOrNull(work.created_date), ctx.window))
-        listed.push(id);
-      else outside += 1;
+      if (!inWindow(dayOrNull(work.created_date), ctx.window)) outside += 1;
+      else if (id) listed.push(id);
+      else unread += 1;
     }
     cursor = page.results.length === PER_PAGE ? page.nextCursor : undefined;
   }
@@ -127,9 +132,11 @@ async function venueWorks(
       perPage: DETAIL_BATCH,
     });
     const byId = new Map(page.results.map((work) => [workId(work.id), work]));
-    works.push(...batch.flatMap((id) => byId.get(id) ?? []));
+    const read = batch.flatMap((id) => byId.get(id) ?? []);
+    unread += batch.length - read.length;
+    works.push(...read);
   }
-  return { works, outside };
+  return { works, outside, unread };
 }
 
 export async function conferenceLines(
@@ -150,8 +157,15 @@ export async function conferenceLines(
     }
     attempted += 1;
     try {
-      const { works, outside } = await venueWorks(ctx, venue.openalexSource);
-      skipped += outside;
+      const { works, outside, unread } = await venueWorks(
+        ctx,
+        venue.openalexSource,
+      );
+      skipped += outside + unread;
+      if (unread)
+        ctx.warn(
+          `${venue.name}: ${unread} works listed by OpenAlex in the window could not be read in full; skipped`,
+        );
       for (const work of works) {
         const kept = inWindow(dayOrNull(work.created_date), ctx.window)
           ? conferenceLine(work, venue.name)
