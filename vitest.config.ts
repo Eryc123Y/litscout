@@ -113,42 +113,46 @@ export default defineConfig({
       exclude: ["apps/web/src/components/ui/**"],
       include: ["{apps,packages}/*/src/**/*.{ts,tsx}"],
       reporter: ["text", "json-summary", "json"],
-      thresholds: {
-        lines: 80,
-        functions: 80,
-        branches: 80,
-        statements: 80,
-        "apps/web/src/**": {
-          lines: 80,
-          functions: 80,
-          branches: 80,
-          statements: 80,
-        },
-        "packages/core/src/**": {
-          lines: 90,
-          functions: 90,
-          branches: 90,
-          statements: 90,
-        },
-        "packages/db/src/**": {
-          lines: 90,
-          functions: 90,
-          branches: 90,
-          statements: 90,
-        },
-        "packages/sync/src/**": {
-          lines: 90,
-          functions: 90,
-          branches: 90,
-          statements: 90,
-        },
-        "packages/pipeline/src/contracts/**": {
-          lines: 90,
-          functions: 90,
-          branches: 90,
-          statements: 90,
-        },
-      },
+      // A shard sees part of the code, so the gates apply when the shards'
+      // reports are merged (`vitest --merge-reports`), not in each shard.
+      thresholds: process.env.VITEST_SHARD
+        ? {}
+        : {
+            lines: 80,
+            functions: 80,
+            branches: 80,
+            statements: 80,
+            "apps/web/src/**": {
+              lines: 80,
+              functions: 80,
+              branches: 80,
+              statements: 80,
+            },
+            "packages/core/src/**": {
+              lines: 90,
+              functions: 90,
+              branches: 90,
+              statements: 90,
+            },
+            "packages/db/src/**": {
+              lines: 90,
+              functions: 90,
+              branches: 90,
+              statements: 90,
+            },
+            "packages/sync/src/**": {
+              lines: 90,
+              functions: 90,
+              branches: 90,
+              statements: 90,
+            },
+            "packages/pipeline/src/contracts/**": {
+              lines: 90,
+              functions: 90,
+              branches: 90,
+              statements: 90,
+            },
+          },
     },
   },
 });

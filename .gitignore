@@ -6,6 +6,8 @@ coverage/
 .env*
 credentials.json
 .artifacts/
+# Shard reports from `vitest --shard ... --reporter=blob`
+.vitest/
 
 # Playwright output when run from a package folder
 test-results/

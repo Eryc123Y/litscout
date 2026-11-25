@@ -54,16 +54,44 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm lint
 
+  # The unit tests run in two shards; `coverage` merges their reports and
+  # checks the coverage gates on the whole, as `pnpm test:coverage` does locally.
   unit:
-    name: Unit tests
+    name: Unit tests (${{ matrix.shard }}/2)
     needs: scope
     if: needs.scope.outputs.code == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-      - run: pnpm test:coverage
+      - run: pnpm test:shard ${{ matrix.shard }}/2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unit-report-${{ matrix.shard }}
+          path: .vitest/blob
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+
+  coverage:
+    name: Coverage and imported tests
+    needs: unit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: unit-report-*
+          path: .vitest/blob
+          merge-multiple: true
+      - run: pnpm test:merge
       - run: node tools/audit.mjs --tests
 
   browser:
@@ -92,7 +120,7 @@ jobs:
   verify:
     name: verify
     if: always()
-    needs: [scope, quick, static, unit, browser]
+    needs: [scope, quick, static, unit, coverage, browser]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

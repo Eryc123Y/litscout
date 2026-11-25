@@ -18,5 +18,15 @@ it("S7 pins the PDF parser consistently and makes high-severity audit part of th
   expect(gate[0]).toBe("pnpm audit --audit-level high");
   expect(gate).toContain("pnpm test:coverage");
   const workflow = readFileSync(".github/workflows/ci.yml", "utf8");
-  for (const step of gate) expect(workflow).toContain(`run: ${step}`);
+  // CI runs the unit tests in shards and checks coverage on the merged
+  // reports, with the same coverage report as the local step.
+  const inCi = (step: string) =>
+    step === "pnpm test:coverage"
+      ? ["pnpm test:shard ${{ matrix.shard }}/2", "pnpm test:merge"]
+      : [step];
+  expect(root.scripts["test:merge"]).toContain(
+    "node tools/coverage-report.mjs",
+  );
+  for (const step of gate)
+    for (const run of inCi(step)) expect(workflow).toContain(`run: ${run}`);
 });

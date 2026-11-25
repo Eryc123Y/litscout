@@ -42,9 +42,11 @@ It runs, in order:
    ([what it checks](self-host.md#rehearse-the-daily-runbook-locally)).
 
 The GitHub workflow splits these into parallel jobs: the quick checks with the
-dependency audit, types and lint, unit tests, and the build with the browser
-tests, smoke tests and rehearsal. A last job, `verify`, passes only when all of
-them pass. A change that touches only documentation runs the quick checks
+dependency audit, types and lint, the unit tests in two shards (`pnpm
+test:shard 1/2`), and the build with the browser tests, smoke tests and
+rehearsal. A merge job (`pnpm test:merge`) checks the coverage gates on the
+shards' combined reports, as `pnpm test:coverage` does locally. A last job,
+`verify`, passes only when all of them pass. A change that touches only documentation runs the quick checks
 alone, unless a test reads one of the changed documents by its path
 ([`tools/ci-scope.mjs`](../tools/ci-scope.mjs)). Dispatching the workflow by
 hand from the Actions tab runs everything. [Workflow](../.github/workflows/ci.yml)
